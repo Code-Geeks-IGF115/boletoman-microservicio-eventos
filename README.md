@@ -10,4 +10,4 @@
 | ---------- | -------------------------------| 
 | ML17017 | Diana Carolina Meléndez Lopez     | 
 | MM18057 | Andrea Melissa Monterrosa Morales | 
-| carnet  | nombre completo                   | 
+| AB12001 | kevin Eliseo Arevalo Beltran      | 
