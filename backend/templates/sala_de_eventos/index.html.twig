@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SalaDeEventos index{% endblock %}
+
+{% block body %}
+    <h1>SalaDeEventos index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Direccion</th>
+                <th>Telefono</th>
+                <th>Email</th>
+                <th>Forma</th>
+                <th>Filas</th>
+                <th>Columnas</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for sala_de_evento in sala_de_eventos %}
+            <tr>
+                <td>{{ sala_de_evento.id }}</td>
+                <td>{{ sala_de_evento.nombre }}</td>
+                <td>{{ sala_de_evento.direccion }}</td>
+                <td>{{ sala_de_evento.telefono }}</td>
+                <td>{{ sala_de_evento.email }}</td>
+                <td>{{ sala_de_evento.forma }}</td>
+                <td>{{ sala_de_evento.filas }}</td>
+                <td>{{ sala_de_evento.columnas }}</td>
+                <td>
+                    <a href="{{ path('app_sala_de_eventos_show', {'id': sala_de_evento.id}) }}">show</a>
+                    <a href="{{ path('app_sala_de_eventos_edit', {'id': sala_de_evento.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_sala_de_eventos_new') }}">Create new</a>
+{% endblock %}
