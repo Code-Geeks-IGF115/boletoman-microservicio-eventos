@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert; //agregue la funcion 
 
 #[ORM\Entity(repositoryClass: EventoRepository::class)]
 class Evento
@@ -26,12 +27,18 @@ class Evento
     #[ORM\Column(length: 25)]
     private ?string $tipoDeEvento = null;
 
+     /**
+     * @Assert\GreaterThanOrEqual("today")
+     */
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fechaInicio = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTimeInterface $horaInicio = null;
-
+    
+    /**
+     * @Assert\GreaterThanOrEqual(propertyPath="fechaInicio")
+     */
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fechaFin = null;
 
