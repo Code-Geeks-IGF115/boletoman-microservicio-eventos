@@ -34,36 +34,52 @@ class SalaDeEventosController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try{
-                $salaDeEventosRepository->save($salaDeEvento, true);
+
+                $salaDeEventosRepository->save($salaDeEvento, true);//para guardar en base de datos
+                $result= $serializer->serialize(['message'=>"Sala de Eventos Guardada."],'json');
+                return $response->fromJsonString($result);
+
             }catch(Exception $e){
                 $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
                 $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
                 return $response->fromJsonString($result);
             }
-        }
 
-        $result= $serializer->serialize(['message'=>"Sala de Eventos Guardada."],'json');
-        return $response->fromJsonString($result);
+        }      
+
     }
 
     #[Route('/{id}', name: 'app_sala_de_eventos_show', methods: ['GET'])]
     public function show(SalaDeEventos $salaDeEvento): Response
     {
+        $response=new JsonResponse();
+        $salaDeEvento = new SalaDeEventos();
+
         return $this->render('sala_de_eventos/show.html.twig', [
             'sala_de_evento' => $salaDeEvento,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_sala_de_eventos_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, SalaDeEventos $salaDeEvento, SalaDeEventosRepository $salaDeEventosRepository): Response
+    public function edit(Request $request, SalaDeEventos $salaDeEvento, SalaDeEventosRepository $salaDeEventosRepository, SerializerInterface $serializer): Response
     {
+        $response=new JsonResponse();
+        $salaDeEvento = new SalaDeEventos();
+
         $form = $this->createForm(SalaDeEventosType::class, $salaDeEvento);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            try{
             $salaDeEventosRepository->save($salaDeEvento, true);
-
             return $this->redirectToRoute('app_sala_de_eventos_index', [], Response::HTTP_SEE_OTHER);
+            $result= $serializer->serialize(['message'=>"Sala de Eventos sobreescrita."],'json');
+            return $response->fromJsonString($result);
+            }catch(Exception $e){
+                $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
+                $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+                return $response->fromJsonString($result);
+            }
         }
 
         return $this->renderForm('sala_de_eventos/edit.html.twig', [
