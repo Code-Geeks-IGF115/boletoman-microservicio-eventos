@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\SalaDeEventos;
 use App\Form\SalaDeEventosType;
 use App\Repository\SalaDeEventosRepository;
+use PhpParser\Node\Expr\Cast\String_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,21 +42,6 @@ class SalaDeEventosController extends AbstractController
             'form' => $form,
         ]);
     }
-
-    #[Route('/sala', name: 'app_sala_de_eventos_crear', methods: ['POST'])]
-    public function sala(Request $request, SalaDeEventosRepository $salaDeEventosRepository): Response
-    {
-        $salaDeEvento = new SalaDeEventos();
-        $form = $this->createForm(SalaDeEventosType::class, $salaDeEvento);
-        $form->handleRequest($request);
-        $lista = array($_GET);
-
-        return $this->json_encode{
-            $mensaje: "",
-            estado: 200 | 403 (no tiene permisos) | 400 (datos incorrectos)
-        }
-    }
-
 
     #[Route('/{id}', name: 'app_sala_de_eventos_show', methods: ['GET'])]
     public function show(SalaDeEventos $salaDeEvento): Response
