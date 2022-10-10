@@ -18,15 +18,14 @@ class SalaDeEventosType extends AbstractType
             ->add('email')
             ->add('forma')
             ->add('filas')
-            ->add('columnas')
-            ->add('evento')
-        ;
+            ->add('columnas');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => SalaDeEventos::class,
+            'csrf_protection' => false,
         ]);
     }
 }

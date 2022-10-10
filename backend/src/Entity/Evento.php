@@ -38,15 +38,21 @@ class Evento
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTimeInterface $horaFin = null;
 
-    #[ORM\OneToOne(mappedBy: 'evento', cascade: ['persist', 'remove'])]
-    private ?SalaDeEventos $salaDeEventos = null;
-
     #[ORM\OneToMany(mappedBy: 'evento', targetEntity: Imagen::class, orphanRemoval: true)]
     private Collection $imagens;
+
+    #[ORM\ManyToOne(inversedBy: 'eventos')]
+    private ?SalaDeEventos $salaDeEventos = null;
 
     public function __construct()
     {
         $this->imagens = new ArrayCollection();
+    }
+
+    public function __toString() {
+        $fechaString=$this->fechaInicio->format('Y-m-d');
+        $horaString=$this->horaInicio->format('H:i:s');
+        return $this->nombre." ".$fechaString." ".$horaString;
     }
 
     public function getId(): ?int
@@ -138,28 +144,7 @@ class Evento
         return $this;
     }
 
-    public function getSalaDeEventos(): ?SalaDeEventos
-    {
-        return $this->salaDeEventos;
-    }
-
-    public function setSalaDeEventos(?SalaDeEventos $salaDeEventos): self
-    {
-        // unset the owning side of the relation if necessary
-        if ($salaDeEventos === null && $this->salaDeEventos !== null) {
-            $this->salaDeEventos->setEvento(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($salaDeEventos !== null && $salaDeEventos->getEvento() !== $this) {
-            $salaDeEventos->setEvento($this);
-        }
-
-        $this->salaDeEventos = $salaDeEventos;
-
-        return $this;
-    }
-
+   
     /**
      * @return Collection<int, Imagen>
      */
@@ -186,6 +171,18 @@ class Evento
                 $imagen->setEvento(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSalaDeEventos(): ?SalaDeEventos
+    {
+        return $this->salaDeEventos;
+    }
+
+    public function setSalaDeEventos(?SalaDeEventos $salaDeEventos): self
+    {
+        $this->salaDeEventos = $salaDeEventos;
 
         return $this;
     }
