@@ -34,15 +34,19 @@ class SalaDeEventosController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try{
+
                 $salaDeEventosRepository->save($salaDeEvento, true);//para guardar en base de datos
                 $result= $serializer->serialize(['message'=>"Sala de Eventos Guardada."],'json');
                 return $response->fromJsonString($result);
+
             }catch(Exception $e){
                 $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
                 $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
                 return $response->fromJsonString($result);
             }
+
         }      
+
     }
 
     #[Route('/{id}', name: 'app_sala_de_eventos_show', methods: ['GET'])]

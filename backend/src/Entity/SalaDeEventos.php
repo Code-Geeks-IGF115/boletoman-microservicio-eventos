@@ -36,15 +36,16 @@ class SalaDeEventos
     #[ORM\Column]
     private ?int $columnas = null;
 
-    #[ORM\OneToOne(inversedBy: 'salaDeEventos', cascade: ['persist', 'remove'])]
-    private ?Evento $evento = null;
-
     #[ORM\OneToMany(mappedBy: 'salaDeEventos', targetEntity: CategoriaButaca::class, orphanRemoval: true)]
     private Collection $categoriaButacas;
+
+    #[ORM\OneToMany(mappedBy: 'salaDeEventos', targetEntity: Evento::class)]
+    private Collection $eventos;
 
     public function __construct()
     {
         $this->categoriaButacas = new ArrayCollection();
+        $this->eventos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -136,18 +137,6 @@ class SalaDeEventos
         return $this;
     }
 
-    public function getEvento(): ?Evento
-    {
-        return $this->evento;
-    }
-
-    public function setEvento(?Evento $evento): self
-    {
-        $this->evento = $evento;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, CategoriaButaca>
      */
@@ -172,6 +161,36 @@ class SalaDeEventos
             // set the owning side to null (unless already changed)
             if ($categoriaButaca->getSalaDeEventos() === $this) {
                 $categoriaButaca->setSalaDeEventos(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Evento>
+     */
+    public function getEventos(): Collection
+    {
+        return $this->eventos;
+    }
+
+    public function addEvento(Evento $evento): self
+    {
+        if (!$this->eventos->contains($evento)) {
+            $this->eventos->add($evento);
+            $evento->setSalaDeEventos($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvento(Evento $evento): self
+    {
+        if ($this->eventos->removeElement($evento)) {
+            // set the owning side to null (unless already changed)
+            if ($evento->getSalaDeEventos() === $this) {
+                $evento->setSalaDeEventos(null);
             }
         }
 
