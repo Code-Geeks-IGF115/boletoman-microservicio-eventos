@@ -1,4 +1,4 @@
-?php
+<?php
 
 namespace App\Controller;
 
@@ -34,7 +34,7 @@ class SalaDeEventosController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try{
-                $salaDeEventosRepository->save($salaDeEvento, true);|/*para guardar en base de datos*/
+                $salaDeEventosRepository->save($salaDeEvento, true);//para guardar en base de datos
                 $result= $serializer->serialize(['message'=>"Sala de Eventos Guardada."],'json');
                 return $response->fromJsonString($result);
             }catch(Exception $e){
@@ -48,13 +48,16 @@ class SalaDeEventosController extends AbstractController
     #[Route('/{id}', name: 'app_sala_de_eventos_show', methods: ['GET'])]
     public function show(SalaDeEventos $salaDeEvento): Response
     {
+        $response=new JsonResponse();
+        $salaDeEvento = new SalaDeEventos();
+
         return $this->render('sala_de_eventos/show.html.twig', [
             'sala_de_evento' => $salaDeEvento,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_sala_de_eventos_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, SalaDeEventos $salaDeEvento, SalaDeEventosRepository $salaDeEventosRepository): Response
+    public function edit(Request $request, SalaDeEventos $salaDeEvento, SalaDeEventosRepository $salaDeEventosRepository, SerializerInterface $serializer): Response
     {
         $response=new JsonResponse();
         $salaDeEvento = new SalaDeEventos();
