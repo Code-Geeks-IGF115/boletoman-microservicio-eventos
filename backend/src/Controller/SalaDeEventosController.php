@@ -23,6 +23,13 @@ class SalaDeEventosController extends AbstractController
         ]);
     }
 
+    /**
+     * Tarea: Función crearSalaDeEventos
+     * Nombre: Carlos Josué Argueta Alvarado
+     * Carnet: AA20099
+     * Fecha de Aprobación: 10/10/2022
+     * Revisión: Andrea Melissa Monterrosa Morales
+     */
     #[Route('/new', name: 'app_sala_de_eventos_new', methods: ['POST'])]
     public function new(Request $request, 
     SalaDeEventosRepository $salaDeEventosRepository,

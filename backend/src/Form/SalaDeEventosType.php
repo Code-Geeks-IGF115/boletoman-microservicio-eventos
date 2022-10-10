@@ -19,7 +19,6 @@ class SalaDeEventosType extends AbstractType
             ->add('forma')
             ->add('filas')
             ->add('columnas')
-            ->add('evento')
         ;
     }
 
