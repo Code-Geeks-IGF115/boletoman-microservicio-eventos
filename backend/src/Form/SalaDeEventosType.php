@@ -27,6 +27,7 @@ class SalaDeEventosType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => SalaDeEventos::class,
+            'csrf_protection' => false,
         ]);
     }
 }

@@ -49,6 +49,12 @@ class Evento
         $this->imagens = new ArrayCollection();
     }
 
+    public function __toString() {
+        $fechaString=$this->fechaInicio->format('Y-m-d');
+        $horaString=$this->horaInicio->format('H:i:s');
+        return $this->nombre." ".$fechaString." ".$horaString;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
