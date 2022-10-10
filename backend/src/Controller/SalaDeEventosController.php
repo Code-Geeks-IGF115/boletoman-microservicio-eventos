@@ -12,23 +12,33 @@ use Symfony\Component\HttpFoundation\{Response, JsonResponse};
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-
+use Exception;
 
 #[Route('/sala/de/eventos')]
 class SalaDeEventosController extends AbstractController
 {
+    
+    /** Tarea: Función verSalasDeEventos
+    * Nombre: Roman Mauricio Hernández Beltrán
+    * Carnet: HB21009
+    * Fecha de Revisión: 10/10/2022
+    * Fecha de Aprobación: 10/10/2022
+    * Revisión: Andrea Melissa Monterrosa Morales
+    */
     #[Route('/', name: 'app_sala_de_eventos_index', methods: ['GET'])]
-  public function index(SalaDeEventosRepository $salaDeEventosRepository, 
+    public function index(SalaDeEventosRepository $salaDeEventosRepository, 
     SerializerInterface $serializer): JsonResponse
     {
         $salaDeEvento=$salaDeEventosRepository->findAll();
         $result = $serializer->serialize(['salas'=>$salaDeEvento],'json');
-    return JsonResponse::fromJsonString($result);
+        return JsonResponse::fromJsonString($result);
     }
 
-     * Tarea: Función crearSalaDeEventos
+     /** Tarea: Función crearSalaDeEventos
      * Nombre: Carlos Josué Argueta Alvarado
      * Carnet: AA20099
+     * Estado: Aprobado
+     * Fecha de Revisión: 10/10/2022
      * Fecha de Aprobación: 10/10/2022
      * Revisión: Andrea Melissa Monterrosa Morales
      */
@@ -58,23 +68,41 @@ class SalaDeEventosController extends AbstractController
 
     }
 
+    /** Tarea: Función verSalaDeEventos
+     * Nombre: Carlos Josué Argueta Alvarado
+     * Carnet: AA20099
+     * Nombre: Roman Mauricio Hernández Beltrán
+     * Carnet: HB21009
+     * Estado: Aprobado
+     * Fecha de Revisión: 10/10/2022
+     * Fecha de Aprobación: 10/10/2022
+     * Revisión: Andrea Melissa Monterrosa Morales
+     */
     #[Route('/{id}', name: 'app_sala_de_eventos_show', methods: ['GET'])]
-    public function show(SalaDeEventos $salaDeEvento): Response
+    public function show(SalaDeEventos $salaDeEvento,SerializerInterface $serializer): JsonResponse
     {
-
         $response=new JsonResponse();
-        $salaDeEvento = new SalaDeEventos();
-
-        return $this->render('sala_de_eventos/show.html.twig', [
-            'sala_de_evento' => $salaDeEvento,
-        ]);
+        try{
+            $result = $serializer->serialize(['salaDeEvento'=>$salaDeEvento],'json');
+        }catch(Exception $e){
+            $result= $serializer->serialize(['message'=>"No se encontraron datos."],'json');
+            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        return $response->fromJsonString($result);
     }
-
+    /** Tarea: Función crearSalaDeEventos
+     * Nombre: Carlos Josué Argueta Alvarado
+     * Carnet: AA20099
+     * Estado: En Reparación
+     * Fecha de Aprobación: 
+     * Fecha de Revisión: 10/10/2022
+     * Revisión: Andrea Melissa Monterrosa Morales
+     */
     #[Route('/{id}/edit', name: 'app_sala_de_eventos_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, SalaDeEventos $salaDeEvento, SalaDeEventosRepository $salaDeEventosRepository, SerializerInterface $serializer): Response
     {
         $response=new JsonResponse();
-        $salaDeEvento = new SalaDeEventos();
+        // $salaDeEvento = new SalaDeEventos();
         $form = $this->createForm(SalaDeEventosType::class, $salaDeEvento);
         $form->handleRequest($request);
 
