@@ -66,7 +66,7 @@ class SalaDeEventosController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_sala_de_eventos_edit', methods: ['GET','POST'])]
-    public function edit(Request $request, SalaDeEventos $salaDeEvento, SalaDeEventosRepository $salaDeEventosRepository, SerializerInterface $serializer): Response
+    public function edit(Request $request, SalaDeEventos $salaDeEvento, SalaDeEventosRepository $salaDeEventosRepository, SerializerInterface $serializer): JsonResponse
     {
         $response=new JsonResponse();
         //$salaDeEvento = new SalaDeEventos();
@@ -77,7 +77,7 @@ class SalaDeEventosController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             
             $salaDeEventosRepository->save($salaDeEvento, true);
-            return $this->redirectToRoute('app_sala_de_eventos_index', [], Response::HTTP_SEE_OTHER);
+            
             $result= $serializer->serialize(['message'=>"Sala de Eventos sobreescrita."],'json');
             return $response->fromJsonString($result);
             
@@ -86,6 +86,12 @@ class SalaDeEventosController extends AbstractController
             $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
                 $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
                 return $response->fromJsonString($result);
+        }
+        else{
+
+            $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
+            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return $response->fromJsonString($result);
         }
 
         /*return $this->renderForm('sala_de_eventos/edit.html.twig', [
