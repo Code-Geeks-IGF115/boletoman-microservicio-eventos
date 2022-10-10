@@ -56,6 +56,9 @@ class SalaDeEventosController extends AbstractController
     #[Route('/{id}/edit', name: 'app_sala_de_eventos_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, SalaDeEventos $salaDeEvento, SalaDeEventosRepository $salaDeEventosRepository): Response
     {
+        $response=new JsonResponse();
+        $salaDeEvento = new SalaDeEventos();
+
         $form = $this->createForm(SalaDeEventosType::class, $salaDeEvento);
         $form->handleRequest($request);
 
