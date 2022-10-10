@@ -7,23 +7,25 @@ use App\Form\SalaDeEventosType;
 use App\Repository\SalaDeEventosRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\{Response,JsonResponse};
+
+use Symfony\Component\HttpFoundation\{Response, JsonResponse};
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
-use Exception;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+
 
 #[Route('/sala/de/eventos')]
 class SalaDeEventosController extends AbstractController
 {
     #[Route('/', name: 'app_sala_de_eventos_index', methods: ['GET'])]
-    public function index(SalaDeEventosRepository $salaDeEventosRepository): Response
+  public function index(SalaDeEventosRepository $salaDeEventosRepository, 
+    SerializerInterface $serializer): JsonResponse
     {
-        return $this->render('sala_de_eventos/index.html.twig', [
-            'sala_de_eventos' => $salaDeEventosRepository->findAll(),
-        ]);
+        $salaDeEvento=$salaDeEventosRepository->findAll();
+        $result = $serializer->serialize(['salas'=>$salaDeEvento],'json');
+    return JsonResponse::fromJsonString($result);
     }
 
-    /**
      * Tarea: Función crearSalaDeEventos
      * Nombre: Carlos Josué Argueta Alvarado
      * Carnet: AA20099
@@ -38,8 +40,8 @@ class SalaDeEventosController extends AbstractController
         $salaDeEvento = new SalaDeEventos();
         $form = $this->createForm(SalaDeEventosType::class, $salaDeEvento);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+
             try{
 
                 $salaDeEventosRepository->save($salaDeEvento, true);//para guardar en base de datos
@@ -59,6 +61,7 @@ class SalaDeEventosController extends AbstractController
     #[Route('/{id}', name: 'app_sala_de_eventos_show', methods: ['GET'])]
     public function show(SalaDeEventos $salaDeEvento): Response
     {
+
         $response=new JsonResponse();
         $salaDeEvento = new SalaDeEventos();
 
@@ -72,11 +75,11 @@ class SalaDeEventosController extends AbstractController
     {
         $response=new JsonResponse();
         $salaDeEvento = new SalaDeEventos();
-
         $form = $this->createForm(SalaDeEventosType::class, $salaDeEvento);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             try{
             $salaDeEventosRepository->save($salaDeEvento, true);
             return $this->redirectToRoute('app_sala_de_eventos_index', [], Response::HTTP_SEE_OTHER);
@@ -87,6 +90,7 @@ class SalaDeEventosController extends AbstractController
                 $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
                 return $response->fromJsonString($result);
             }
+
         }
 
         return $this->renderForm('sala_de_eventos/edit.html.twig', [
