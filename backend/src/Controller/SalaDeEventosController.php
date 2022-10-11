@@ -27,6 +27,8 @@ class SalaDeEventosController extends AbstractController
      * Tarea: Función crearSalaDeEventos
      * Nombre: Carlos Josué Argueta Alvarado
      * Carnet: AA20099
+     * Estado: Aprobado
+     * Fecha de Revisión: 10/10/2022
      * Fecha de Aprobación: 10/10/2022
      * Revisión: Andrea Melissa Monterrosa Morales
      */
@@ -34,27 +36,26 @@ class SalaDeEventosController extends AbstractController
     public function new(Request $request, 
     SalaDeEventosRepository $salaDeEventosRepository,
     SerializerInterface $serializer): JsonResponse
-    {   $response=new JsonResponse();
+    {  
+        $response=new JsonResponse();
         $salaDeEvento = new SalaDeEventos();
         $form = $this->createForm(SalaDeEventosType::class, $salaDeEvento);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            try{
 
-                $salaDeEventosRepository->save($salaDeEvento, true);//para guardar en base de datos
-                $result= $serializer->serialize(['message'=>"Sala de Eventos Guardada."],'json');
-                return $response->fromJsonString($result);
-
-            }catch(Exception $e){
-                $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
-                $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-                return $response->fromJsonString($result);
-            }
-
-        }      
-
-    }
+            $salaDeEventosRepository->save($salaDeEvento, true);//para guardar en base de datos
+            $result= $serializer->serialize(['message'=>"Sala de Eventos Guardada."],'json');
+            //return $response->fromJsonString($result);
+        }    
+        else{
+            $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
+            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            
+        } 
+        return $response->fromJsonString($result);
+    }  
+    
 
     #[Route('/{id}', name: 'app_sala_de_eventos_show', methods: ['GET'])]
     public function show(SalaDeEventos $salaDeEvento): Response
@@ -79,14 +80,14 @@ class SalaDeEventosController extends AbstractController
             $salaDeEventosRepository->save($salaDeEvento, true);
             
             $result= $serializer->serialize(['message'=>"Sala de Eventos sobreescrita."],'json');
-            return $response->fromJsonString($result);
-            
+            //return $response->fromJsonString($result);  
         }
         else{
             $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
-                $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-                return $response->fromJsonString($result);
+            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);  
         }
+
+        return $response->fromJsonString($result);
         /*return $this->renderForm('sala_de_eventos/edit.html.twig', [
             'sala_de_evento' => $salaDeEvento,
             'form' => $form,
