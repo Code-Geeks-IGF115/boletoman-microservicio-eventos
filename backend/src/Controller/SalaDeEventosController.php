@@ -65,7 +65,7 @@ class SalaDeEventosController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_sala_de_eventos_edit', methods: ['GET','POST'])]
+    #[Route('/{id}/edit', name: 'app_sala_de_eventos_edit', methods: ['POST'])]
     public function edit(Request $request, SalaDeEventos $salaDeEvento, SalaDeEventosRepository $salaDeEventosRepository, SerializerInterface $serializer): JsonResponse
     {
         $response=new JsonResponse();
@@ -87,13 +87,6 @@ class SalaDeEventosController extends AbstractController
                 $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
                 return $response->fromJsonString($result);
         }
-        else{
-
-            $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
-            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-            return $response->fromJsonString($result);
-        }
-
         /*return $this->renderForm('sala_de_eventos/edit.html.twig', [
             'sala_de_evento' => $salaDeEvento,
             'form' => $form,
