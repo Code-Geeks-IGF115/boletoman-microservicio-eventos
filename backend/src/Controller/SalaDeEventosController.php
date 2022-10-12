@@ -67,11 +67,12 @@ class SalaDeEventosController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_sala_de_eventos_edit', methods: ['POST'])]
-    public function edit(Request $request, SalaDeEventos $salaDeEvento, SalaDeEventosRepository $salaDeEventosRepository, SerializerInterface $serializer): JsonResponse
+    public function edit(Request $request, SalaDeEventos $salaDeEvento, SalaDeEventosRepository $salaDeEventosRepository, 
+    $id, SerializerInterface $serializer): JsonResponse
     {
         $response=new JsonResponse();
         //$salaDeEvento = new SalaDeEventos();
-
+        $salaDeEvento = $salaDeEventosRepository->find($id);
         $form = $this->createForm(SalaDeEventosType::class, $salaDeEvento);
         $form->handleRequest($request);
 
@@ -79,7 +80,7 @@ class SalaDeEventosController extends AbstractController
             
             $salaDeEventosRepository->save($salaDeEvento, true);
             
-            $result= $serializer->serialize(['message'=>"Sala de Eventos sobreescrita."],'json');
+            $result= $serializer->serialize(['message'=>"Sala de Eventos sobreescrita con exito."],'json');
             //return $response->fromJsonString($result);  
         }
         else{
