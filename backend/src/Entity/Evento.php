@@ -49,9 +49,6 @@ class Evento
     #[ORM\ManyToOne(inversedBy: 'eventos')]
     private ?SalaDeEventos $salaDeEventos = null;
 
-    #[ORM\ManyToOne(inversedBy: 'eventos')]
-    private ?SalaDeEventos $salaDeEventos = null;
-
     //#[ORM\OneToMany(mappedBy: 'eventos', targetEntity: SalaDeEventos::class)]
     //private Collection $salaDeEventos;
 
@@ -59,12 +56,6 @@ class Evento
     {
         $this->imagens = new ArrayCollection();
        // $this->salaDeEventos = new ArrayCollection();
-    }
-
-    public function __toString() {
-        $fechaString=$this->fechaInicio->format('Y-m-d');
-        $horaString=$this->horaInicio->format('H:i:s');
-        return $this->nombre." ".$fechaString." ".$horaString;
     }
 
     public function __toString() {
@@ -205,15 +196,4 @@ class Evento
         return $this;
     }
 
-    public function getSalaDeEventos(): ?SalaDeEventos
-    {
-        return $this->salaDeEventos;
-    }
-
-    public function setSalaDeEventos(?SalaDeEventos $salaDeEventos): self
-    {
-        $this->salaDeEventos = $salaDeEventos;
-
-        return $this;
-    }
 }

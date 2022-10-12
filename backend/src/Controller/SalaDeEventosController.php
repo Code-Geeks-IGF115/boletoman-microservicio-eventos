@@ -53,26 +53,10 @@ class SalaDeEventosController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-
-            try{
-
                 $salaDeEventosRepository->save($salaDeEvento, true);//para guardar en base de datos
                 $result= $serializer->serialize(['message'=>"Sala de Eventos Guardada."],'json');
-                return $response->fromJsonString($result);
-
-            }catch(Exception $e){
-                $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
-                $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-                return $response->fromJsonString($result);
-            }
-
-        }      
-
-
-            $salaDeEventosRepository->save($salaDeEvento, true);//para guardar en base de datos
-            $result= $serializer->serialize(['message'=>"Sala de Eventos Guardada."],'json');
-            //return $response->fromJsonString($result);
-        }    
+                return $response->fromJsonString($result);         
+        }       
         else{
             $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
             $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
@@ -107,11 +91,12 @@ class SalaDeEventosController extends AbstractController
     }
     
     
-    /** Tarea: Función crearSalaDeEventos
+    /** Tarea: Función editarSalaDeEventos
      * Nombre: Carlos Josué Argueta Alvarado
      * Carnet: AA20099
-     * Estado: En Reparación
-     * Fecha de Aprobación: 
+     * Estado: Aprobado
+     * Fecha de Aprobación: 11/10/2022
+     * fecha de ultima modificacion : 11/10/2022
      * Fecha de Revisión: 10/10/2022
      * Revisión: Andrea Melissa Monterrosa Morales
      */
@@ -131,7 +116,7 @@ class SalaDeEventosController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $salaDeEventosRepository->save($salaDeEvento, true);
-            $result= $serializer->serialize(['message'=>"Sala de Eventos sobreescrita con exito."],'json');
+            $result= $serializer->serialize(['message'=>"Sala de Eventos se modificó con exito."],'json');
         }
         else{
             $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
