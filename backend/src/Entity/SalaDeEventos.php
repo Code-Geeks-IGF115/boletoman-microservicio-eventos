@@ -170,11 +170,12 @@ class SalaDeEventos
     /**
      * @return Collection<int, Evento>
      */
+    
     public function getEventos(): Collection
     {
         return $this->eventos;
     }
-
+    /*
     public function addEvento(Evento $evento): self
     {
         if (!$this->eventos->contains($evento)) {
@@ -195,5 +196,5 @@ class SalaDeEventos
         }
 
         return $this;
-    }
+    }*/
 }
