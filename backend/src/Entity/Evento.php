@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert; //agregue la funcion 
 
 #[ORM\Entity(repositoryClass: EventoRepository::class)]
 class Evento
@@ -25,13 +26,17 @@ class Evento
 
     #[ORM\Column(length: 25)]
     private ?string $tipoDeEvento = null;
-
+ /**
+     * @Assert\GreaterThanOrEqual("today")
+     */
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fechaInicio = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTimeInterface $horaInicio = null;
-
+ /**
+     * @Assert\GreaterThanOrEqual(propertyPath="fechaInicio")
+     */
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fechaFin = null;
 
@@ -44,9 +49,22 @@ class Evento
     #[ORM\ManyToOne(inversedBy: 'eventos')]
     private ?SalaDeEventos $salaDeEventos = null;
 
+    #[ORM\ManyToOne(inversedBy: 'eventos')]
+    private ?SalaDeEventos $salaDeEventos = null;
+
+    //#[ORM\OneToMany(mappedBy: 'eventos', targetEntity: SalaDeEventos::class)]
+    //private Collection $salaDeEventos;
+
     public function __construct()
     {
         $this->imagens = new ArrayCollection();
+       // $this->salaDeEventos = new ArrayCollection();
+    }
+
+    public function __toString() {
+        $fechaString=$this->fechaInicio->format('Y-m-d');
+        $horaString=$this->horaInicio->format('H:i:s');
+        return $this->nombre." ".$fechaString." ".$horaString;
     }
 
     public function __toString() {
@@ -171,6 +189,18 @@ class Evento
                 $imagen->setEvento(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSalaDeEventos(): ?SalaDeEventos
+    {
+        return $this->salaDeEventos;
+    }
+
+    public function setSalaDeEventos(?SalaDeEventos $salaDeEventos): self
+    {
+        $this->salaDeEventos = $salaDeEventos;
 
         return $this;
     }

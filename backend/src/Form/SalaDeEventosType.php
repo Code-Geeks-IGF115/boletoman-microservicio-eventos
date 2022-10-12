@@ -18,8 +18,7 @@ class SalaDeEventosType extends AbstractType
             ->add('email')
             ->add('forma')
             ->add('filas')
-            ->add('columnas')
-        ;
+            ->add('columnas');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
