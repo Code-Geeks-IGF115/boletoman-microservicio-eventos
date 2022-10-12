@@ -91,11 +91,12 @@ class SalaDeEventosController extends AbstractController
     }
     
     
-    /** Tarea: Función crearSalaDeEventos
+    /** Tarea: Función editarSalaDeEventos
      * Nombre: Carlos Josué Argueta Alvarado
      * Carnet: AA20099
-     * Estado: En Reparación
-     * Fecha de Aprobación: 
+     * Estado: Aprobado
+     * Fecha de Aprobación: 11/10/2022
+     * fecha de ultima modificacion : 11/10/2022
      * Fecha de Revisión: 10/10/2022
      * Revisión: Andrea Melissa Monterrosa Morales
      */
