@@ -53,14 +53,12 @@ class SalaDeEventosController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-                $salaDeEventosRepository->save($salaDeEvento, true);//para guardar en base de datos
-                $result= $serializer->serialize(['message'=>"Sala de Eventos Guardada."],'json');
-                return $response->fromJsonString($result);         
+            $salaDeEventosRepository->save($salaDeEvento, true);//para guardar en base de datos
+            $result= $serializer->serialize(['message'=>"Sala de Eventos Guardada."],'json');      
         }       
         else{
             $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
-            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-            
+            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR); 
         } 
         return $response->fromJsonString($result);
     }  
@@ -72,21 +70,22 @@ class SalaDeEventosController extends AbstractController
      * Nombre: Roman Mauricio Hernández Beltrán
      * Carnet: HB21009
      * Estado: Aprobado
+     * ultima modificacion: 12/10/2022
      * Fecha de Revisión: 10/10/2022
      * Fecha de Aprobación: 10/10/2022
      * Revisión: Andrea Melissa Monterrosa Morales
      */
     #[Route('/{id}', name: 'app_sala_de_eventos_show', methods: ['GET'])]
-    public function show(SalaDeEventos $salaDeEvento,SerializerInterface $serializer): JsonResponse
+    public function show(SalaDeEventos $salaDeEvento = null,SerializerInterface $serializer): JsonResponse
     {
-
         $response=new JsonResponse();
-        try{
-            $result = $serializer->serialize(['salaDeEvento'=>$salaDeEvento],'json');
-        }catch(Exception $e){
-            $result= $serializer->serialize(['message'=>"No se encontraron datos."],'json');
+        if(empty($salaDeEvento)){
+            $result= $serializer->serialize(['message'=>"No se encontró sala de evento"],'json');
             $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
+        else{
+            $result = $serializer->serialize(['salaDeEvento'=>$salaDeEvento],'json');
+        } 
         return $response->fromJsonString($result);
     }
     
