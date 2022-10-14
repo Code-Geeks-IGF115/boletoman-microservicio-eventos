@@ -29,9 +29,11 @@ class SalaDeEventosController extends AbstractController
     public function index(SalaDeEventosRepository $salaDeEventosRepository, 
     SerializerInterface $serializer): JsonResponse
     {
+        $response=new JsonResponse();
+        $response->headers->set('Access-Control-Allow-Origin', '%env(resolve:CORS_ALLOW_ORIGIN)%');
         $salaDeEvento=$salaDeEventosRepository->findAll();
         $result = $serializer->serialize(['salas'=>$salaDeEvento],'json');
-        return JsonResponse::fromJsonString($result);
+        return $response->fromJsonString($result);
     }
 
      /** Tarea: Función crearSalaDeEventos
