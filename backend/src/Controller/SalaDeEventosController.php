@@ -46,27 +46,25 @@ class SalaDeEventosController extends AbstractController
     public function new(Request $request, 
     SalaDeEventosRepository $salaDeEventosRepository,
     SerializerInterface $serializer): JsonResponse
-    {   $response=new JsonResponse();
+    {  
+        $response=new JsonResponse();
         $salaDeEvento = new SalaDeEventos();
         $form = $this->createForm(SalaDeEventosType::class, $salaDeEvento);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            try{
-
                 $salaDeEventosRepository->save($salaDeEvento, true);//para guardar en base de datos
                 $result= $serializer->serialize(['message'=>"Sala de Eventos Guardada."],'json');
-                return $response->fromJsonString($result);
-
-            }catch(Exception $e){
-                $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
-                $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-                return $response->fromJsonString($result);
-            }
-
-        }      
-
-    }
+                return $response->fromJsonString($result);         
+        }       
+        else{
+            $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
+            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            
+        } 
+        return $response->fromJsonString($result);
+    }  
+    
 
     /** Tarea: Función verSalaDeEventos
      * Nombre: Carlos Josué Argueta Alvarado
@@ -74,7 +72,6 @@ class SalaDeEventosController extends AbstractController
      * Nombre: Roman Mauricio Hernández Beltrán
      * Carnet: HB21009
      * Estado: Aprobado
-     * ultima modificacion: 12/10/2022
      * Fecha de Revisión: 10/10/2022
      * Fecha de Aprobación: 10/10/2022
      * Revisión: Andrea Melissa Monterrosa Morales
@@ -83,64 +80,51 @@ class SalaDeEventosController extends AbstractController
     public function show(SalaDeEventos $salaDeEvento = null,SerializerInterface $serializer): JsonResponse
     {
         $response=new JsonResponse();
-<<<<<<< HEAD
-        try{
-            $result = $serializer->serialize(['salaDeEvento'=>$salaDeEvento],'json');
-            return $response->fromJsonString($result);
-        }catch(Exception $e){
-            $result= $serializer->serialize(['message'=>"No se encontraron datos."],'json');
-=======
         if(empty($salaDeEvento)){
             $result= $serializer->serialize(['message'=>"No se encontró sala de evento"],'json');
->>>>>>> 120493598f4f5a0fe170b0e53b50e14e2cdce67e
             $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-            return $response->fromJsonString($result);
         }
-<<<<<<< HEAD
-        //return $response->fromJsonString($result);
-=======
         else{
             $result = $serializer->serialize(['salaDeEvento'=>$salaDeEvento],'json');
         } 
         return $response->fromJsonString($result);
->>>>>>> 120493598f4f5a0fe170b0e53b50e14e2cdce67e
     }
-    /** Tarea: Función crearSalaDeEventos
+    
+    
+    /** Tarea: Función editarSalaDeEventos
      * Nombre: Carlos Josué Argueta Alvarado
      * Carnet: AA20099
-     * Estado: En Reparación
-     * Fecha de Aprobación: 
+     * Estado: Aprobado
+     * Fecha de Aprobación: 11/10/2022
+     * fecha de ultima modificacion : 11/10/2022
      * Fecha de Revisión: 10/10/2022
      * Revisión: Andrea Melissa Monterrosa Morales
      */
-    #[Route('/{id}/edit', name: 'app_sala_de_eventos_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, SalaDeEventos $salaDeEvento, SalaDeEventosRepository $salaDeEventosRepository, SerializerInterface $serializer): Response
+    #[Route('/{id}/edit', name: 'app_sala_de_eventos_edit', methods: ['POST'])]
+    public function edit(Request $request, SalaDeEventos $salaDeEvento = null, 
+    SalaDeEventosRepository $salaDeEventosRepository, SerializerInterface $serializer): JsonResponse
     {
         $response=new JsonResponse();
-        // $salaDeEvento = new SalaDeEventos();
-        $form = $this->createForm(SalaDeEventosType::class, $salaDeEvento);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            try{
-            $salaDeEventosRepository->save($salaDeEvento, true);
-            return $this->redirectToRoute('app_sala_de_eventos_index', [], Response::HTTP_SEE_OTHER);
-            $result= $serializer->serialize(['message'=>"Sala de Eventos sobreescrita."],'json');
-            return $response->fromJsonString($result);
-            }catch(Exception $e){
-                $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
-                $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-                return $response->fromJsonString($result);
-            }
-
+        if(empty($salaDeEvento)){
+            $result= $serializer->serialize(['message'=>"Sala de eventos no existe."],'json');
+            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);  
         }
+        else{
+            $form = $this->createForm(SalaDeEventosType::class, $salaDeEvento);
+            $form->handleRequest($request);
 
-        return $this->renderForm('sala_de_eventos/edit.html.twig', [
-            'sala_de_evento' => $salaDeEvento,
-            'form' => $form,
-        ]);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $salaDeEventosRepository->save($salaDeEvento, true);
+                $result= $serializer->serialize(['message'=>"Sala de Eventos se modificó con exito."],'json');
+            }
+            else{
+                $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
+                $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);  
+            }
+        } 
+        return $response->fromJsonString($result);
     }
+
 
     #[Route('/{id}', name: 'app_sala_de_eventos_delete', methods: ['POST'])]
     public function delete(Request $request, SalaDeEventos $salaDeEvento, SalaDeEventosRepository $salaDeEventosRepository): Response
