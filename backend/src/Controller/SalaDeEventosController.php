@@ -84,11 +84,13 @@ class SalaDeEventosController extends AbstractController
         $response=new JsonResponse();
         try{
             $result = $serializer->serialize(['salaDeEvento'=>$salaDeEvento],'json');
+            return $response->fromJsonString($result);
         }catch(Exception $e){
             $result= $serializer->serialize(['message'=>"No se encontraron datos."],'json');
             $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return $response->fromJsonString($result);
         }
-        return $response->fromJsonString($result);
+        //return $response->fromJsonString($result);
     }
     /** Tarea: Función crearSalaDeEventos
      * Nombre: Carlos Josué Argueta Alvarado
