@@ -77,16 +77,16 @@ class SalaDeEventosController extends AbstractController
      * Revisión: Andrea Melissa Monterrosa Morales
      */
     #[Route('/{id}', name: 'app_sala_de_eventos_show', methods: ['GET'])]
-    public function show(SalaDeEventos $salaDeEvento,SerializerInterface $serializer): JsonResponse
+    public function show(SalaDeEventos $salaDeEvento = null,SerializerInterface $serializer): JsonResponse
     {
-
         $response=new JsonResponse();
-        try{
-            $result = $serializer->serialize(['salaDeEvento'=>$salaDeEvento],'json');
-        }catch(Exception $e){
-            $result= $serializer->serialize(['message'=>"No se encontraron datos."],'json');
+        if(empty($salaDeEvento)){
+            $result= $serializer->serialize(['message'=>"No se encontró sala de evento"],'json');
             $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
+        else{
+            $result = $serializer->serialize(['salaDeEvento'=>$salaDeEvento],'json');
+        } 
         return $response->fromJsonString($result);
     }
     
@@ -101,31 +101,30 @@ class SalaDeEventosController extends AbstractController
      * Revisión: Andrea Melissa Monterrosa Morales
      */
     #[Route('/{id}/edit', name: 'app_sala_de_eventos_edit', methods: ['POST'])]
-    public function edit(Request $request, SalaDeEventos $salaDeEvento = null, SalaDeEventosRepository $salaDeEventosRepository, 
-    $id, SerializerInterface $serializer): JsonResponse
+    public function edit(Request $request, SalaDeEventos $salaDeEvento = null, 
+    SalaDeEventosRepository $salaDeEventosRepository, SerializerInterface $serializer): JsonResponse
     {
         $response=new JsonResponse();
         if(empty($salaDeEvento)){
             $result= $serializer->serialize(['message'=>"Sala de eventos no existe."],'json');
             $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);  
-            return $response->fromJsonString($result);
-        }
-
-        $form = $this->createForm(SalaDeEventosType::class, $salaDeEvento);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $salaDeEventosRepository->save($salaDeEvento, true);
-            $result= $serializer->serialize(['message'=>"Sala de Eventos se modificó con exito."],'json');
         }
         else{
-            $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
-            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);  
+            $form = $this->createForm(SalaDeEventosType::class, $salaDeEvento);
+            $form->handleRequest($request);
 
-        }
-
+            if ($form->isSubmitted() && $form->isValid()) {
+                $salaDeEventosRepository->save($salaDeEvento, true);
+                $result= $serializer->serialize(['message'=>"Sala de Eventos se modificó con exito."],'json');
+            }
+            else{
+                $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
+                $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);  
+            }
+        } 
         return $response->fromJsonString($result);
     }
+
 
     #[Route('/{id}', name: 'app_sala_de_eventos_delete', methods: ['POST'])]
     public function delete(Request $request, SalaDeEventos $salaDeEvento, SalaDeEventosRepository $salaDeEventosRepository): Response
