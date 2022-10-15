@@ -25,7 +25,7 @@ class EventoController extends AbstractController
      $result= $serializer->serialize(['eventos'=>$eventos],'json');
        return JsonResponse::fromJsonString($result);
     }
-    }
+    
 
     #[Route('/new', name: 'app_evento_new', methods: ['GET','POST'])]
     public function new(Request $request, 
