@@ -17,84 +17,77 @@ use Exception;
 class EventoController extends AbstractController
 {
     #[Route('/', name: 'app_evento_index', methods: ['GET'])]
-   // public function index(
-       // EventoRepository $eventoRepository, 
-       // SerializerInterface $serializer): JsonResponse
-    //{
-      //  $eventos=$eventoRepository->findAll();
-       // $result= $serializer->serialize(['eventos'=>$eventos],'json');
-       // return JsonResponse::fromJsonString($result);
-    //}
-    public function index(EventoRepository $eventoRepository): Response
+   public function index(
+    EventoRepository $eventoRepository, 
+     SerializerInterface $serializer): JsonResponse
     {
-        return $this->render('evento/index.html.twig', [
-            'eventos' => $eventoRepository->findAll(),
-        ]);
+        $eventos=$eventoRepository->findAll();
+     $result= $serializer->serialize(['eventos'=>$eventos],'json');
+       return JsonResponse::fromJsonString($result);
+    }
     }
 
-    #[Route('/new', name: 'app_evento_new', methods: ['POST'])]
-    public function new(Request $request, Evento $eventos, EventoRepository $eventoRepository, SerializerInterface $serializer): JsonResponse
-   
-    {   $response=new JsonResponse();
-        
+    #[Route('/new', name: 'app_evento_new', methods: ['GET','POST'])]
+    public function new(Request $request, 
+    EventoRepository $eventoRepository, 
+    SerializerInterface $serializer): JsonResponse
+   {   
+        $response=new JsonResponse();
+        $eventos = new Evento();
         $form = $this->createForm(EventoType::class, $eventos);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-           try{
 
-                $eventoRepository->save($eventos, true);
-                $result= $serializer->serialize(['message'=>"Evento guardado."],'json');
-                return $response->fromJsonString($result);
+            $eventoRepository->save($eventos, true);
+            $result= $serializer->serialize(['message'=>"Evento guardado."],'json');
+                
+        }
+        else{
+            $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
+            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+                
+        }
+        return $response->fromJsonString($result);
+    }      
 
-            }catch(Exception $e){
-                $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
-                $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-                return $response->fromJsonString($result);
-            }
-
-        }      
-
-    }
 
     #[Route('/{id}', name: 'app_evento_show', methods: ['GET'])]
-    public function show(Evento $evento): Response
+    public function show(Evento $evento = nullSerializerInterface $serializer): JsonResponse
     {
         $response=new JsonResponse();
-        return $this->render('evento/show.html.twig', [
-            'evento' => $evento,
-        ]);
+        if(empty($eventos)){
+            $result= $serializer->serialize(['message'=>"No se encontró el evento solicitado"],'json');
+            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        else{
+            $result = $serializer->serialize(['eventos'=>$eventos],'json');
+        } 
+        return $response->fromJsonString($result);   
     }
 
     #[Route('/{id}/edit', name: 'app_evento_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Evento $eventos, EventoRepository $eventoRepository, SerializerInterface $serializer): JsonResponse
+    public function edit(Request $request, Evento $eventos = null, 
+    EventoRepository $eventoRepository, SerializerInterface $serializer): JsonResponse
     {
         $response=new JsonResponse();
-
-        $form = $this->createForm(EventoType::class, $eventos);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            try{
-
-            $eventoRepository->save($eventos, true);
-            $result= $serializer->serialize(['message'=>"Evento actualizado"],'json');
-            
-            return $response->fromJsonString($result);
-            
-        }catch(Exception $e){
-                $result= $serializer->serialize(['message'=>"Datos no validos."],'json');
-                $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-                
-                return $response->fromJsonString($result);
-            }
+        if(empty($eventos)){
+            $result= $serializer->serialize(['message'=>"El evento no exite."],'json');
+            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);  
         }
         else{
+            $form = $this->createForm(EventoType::class, $eventos);
+            $form->handleRequest($request);
 
-            $result= $serializer->serialize(['message'=>"Datos invalidos."],'json');
-            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-            return $response->fromJsonString($result);
-        }
+            if ($form->isSubmitted() && $form->isValid()) {
+                $eventoRepository->save($eventos, true);
+                $result= $serializer->serialize(['message'=>"El evento se ha modificado."],'json');
+            }
+            else{
+                $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
+                $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);  
+            }
+        } 
+        return $response->fromJsonString($result);
     }
 
     #[Route('/{id}', name: 'app_evento_delete', methods: ['POST'])]
