@@ -52,7 +52,7 @@ class EventoController extends AbstractController
 
 
     #[Route('/{id}', name: 'app_evento_show', methods: ['GET'])]
-    public function show(Evento $evento = nullSerializerInterface $serializer): JsonResponse
+    public function show(Evento $eventos = null,SerializerInterface $serializer): JsonResponse
     {
         $response=new JsonResponse();
         if(empty($eventos)){
