@@ -42,7 +42,7 @@ class SalaDeEventosController extends AbstractController
      * Fecha de Aprobación: 10/10/2022
      * Revisión: Andrea Melissa Monterrosa Morales
      */
-    #[Route('/new', name: 'app_sala_de_eventos_new', methods: ['POST'])]
+    #[Route('/new', name: 'app_sala_de_eventos_new', methods: ['GET','POST'])]
     public function new(Request $request, 
     SalaDeEventosRepository $salaDeEventosRepository,
     SerializerInterface $serializer): JsonResponse
