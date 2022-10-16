@@ -1,0 +1,101 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\Evento;
+use App\Form\EventoType;
+use App\Repository\EventoRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\{Response, JsonResponse};
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use App\Service\ResponseHelper;
+use Exception;
+
+#[Route('/evento')]
+class EventoController extends AbstractController
+{
+    private ResponseHelper $responseHelper;
+
+    public function __construct(ResponseHelper $responseHelper)
+    {
+        $this->responseHelper=$responseHelper;
+    }
+
+    #[Route('/', name: 'app_evento_index', methods: ['GET'])]
+    public function index(EventoRepository $eventoRepository): JsonResponse
+    {
+        $eventos=$eventoRepository->findAll();
+        return $this->responseHelper->responseDatos(['eventos'=>$eventos]);
+    }
+    
+
+    #[Route('/new', name: 'app_evento_new', methods: ['POST'])]
+    public function new(Request $request, 
+    EventoRepository $eventoRepository): JsonResponse
+   {   
+        $evento = new Evento();
+        $form = $this->createForm(EventoType::class, $evento);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $eventoRepository->save($evento, true);
+            $result= $this->responseHelper->responseMessage("Evento guardado.");
+                
+        }
+        else{
+            $result= $this->responseHelper->responseDatosNoValidos();
+                
+        }
+        return $result;
+    }      
+
+
+    #[Route('/{id}', name: 'app_evento_show', methods: ['GET'])]
+    public function show(Evento $evento = null): JsonResponse
+    {
+        if(empty($evento)){
+            $result= $this->responseHelper->responseMessage("No se encontró el evento solicitado.");
+        }
+        else{
+            $result = $this->responseHelper->responseDatos(['evento'=>$evento]);
+        } 
+        return $result;   
+    }
+
+    #[Route('/{id}/edit', name: 'app_evento_edit', methods: ['POST'])]
+    public function edit(Request $request, Evento $evento = null, 
+    EventoRepository $eventoRepository, SerializerInterface $serializer): JsonResponse
+    {
+        if(empty($evento)){
+            $result= $this->responseHelper->responseMessage("No se encontró el evento solicitado."); 
+        }
+        else{
+            $form = $this->createForm(EventoType::class, $evento);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $eventoRepository->save($evento, true);
+                $result= $this->responseHelper->responseMessage("El evento se ha modificado.");
+            }
+            else{
+                $result= $this->responseHelper->responseDatosNoValidos();  
+            }
+        } 
+        return $result;
+    }
+
+    #[Route('/{id}', name: 'app_evento_delete', methods: ['POST'])]
+    public function delete(Request $request, Evento $evento= null, EventoRepository $eventoRepository): Response
+    {
+        if(empty($evento)){
+            $result= $this->responseHelper->responseMessage("No se encontró el evento solicitado."); 
+        }else{
+            $eventoRepository->remove($evento, true);
+        }        
+
+        return $this->responseHelper->responseMessage("Evento eliminado.");
+    }
+}
