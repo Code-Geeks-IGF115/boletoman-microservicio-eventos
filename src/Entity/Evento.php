@@ -46,16 +46,16 @@ class Evento
     #[ORM\OneToMany(mappedBy: 'evento', targetEntity: Imagen::class, orphanRemoval: true)]
     private Collection $imagens;
 
-    #[ORM\ManyToOne(inversedBy: 'eventos')]
-    private ?SalaDeEventos $salaDeEventos = null;
+    #[ORM\Column]
+    private ?int $sala_de_eventos_id = null;
 
-    //#[ORM\OneToMany(mappedBy: 'eventos', targetEntity: SalaDeEventos::class)]
-    //private Collection $salaDeEventos;
+    #[ORM\ManyToOne(inversedBy: 'eventos')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?CategoriaEvento $categoria = null;
 
     public function __construct()
     {
         $this->imagens = new ArrayCollection();
-       // $this->salaDeEventos = new ArrayCollection();
     }
 
     public function __toString() {
@@ -184,14 +184,26 @@ class Evento
         return $this;
     }
 
-    public function getSalaDeEventos(): ?SalaDeEventos
+    public function getSalaDeEventosID(): ?int
     {
-        return $this->salaDeEventos;
+        return $this->sala_de_eventos_id;
     }
 
-    public function setSalaDeEventos(?SalaDeEventos $salaDeEventos): self
+    public function setSalaDeEventosID(?int $sala_de_eventos_id): self
     {
-        $this->salaDeEventos = $salaDeEventos;
+        $this->sala_de_eventos_id = $sala_de_eventos_id;
+
+        return $this;
+    }
+
+    public function getCategoria(): ?CategoriaEvento
+    {
+        return $this->categoria;
+    }
+
+    public function setCategoria(?CategoriaEvento $categoria): self
+    {
+        $this->categoria = $categoria;
 
         return $this;
     }
