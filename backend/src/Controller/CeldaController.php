@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\CategoriaButaca;
 use App\Entity\Celda;
 use App\Form\CeldaType;
+use App\Repository\CategoriaButacaRepository;
 use App\Repository\CeldaRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,28 +27,28 @@ class CeldaController extends AbstractController
     }
 
     #[Route('/new', name: 'app_celda_new', methods: ['POST'])]
-    public function new(Request $request, CeldaRepository $celdaRepository, 
-    SerializerInterface $serializer): Response
+    public function new(Request $request, CeldaRepository $celdaRepository,  
+    CategoriaButacaRepository $CategoriaButaca,
+    SerializerInterface $serializer): JsonResponse
     {
         $response = new JsonResponse();
         $celda = new Celda();
-        
         $form = $this->createForm(CeldaType::class, $celda);
         $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $celdaRepository->save($celda, true);
-            //$result = $serializer-> serialize(['message' => "celda guardada con exito"], 'json');
-            return $this->redirectToRoute('app_celda_index', [], Response::HTTP_SEE_OTHER);
-        }
-        //else{
-        //    $result = $serializer->serialize(['message'=>"datos no validos"], 'json');
-        //}
-        return $this->renderForm('celda/new.html.twig', [
+        //if ($form->isSubmitted() && $form->isValid()) {
+            //$celdaRepository->save($celda, true);
+            $result = $serializer-> serialize(['celdas:'=>
+            $celdaRepository->findAll()], 'json');
+            //return $this->redirectToRoute('app_celda_index', [], Response::HTTP_SEE_OTHER);
+       // }
+       // else{
+          // $result = $serializer->serialize(['message'=>"datos no validos"], 'json');
+       // }
+        /*return $this->renderForm('celda/new.html.twig', [
             'celda' => $celda,
             'form' => $form,
-        ]);
-        //return $response->fromJsonString($result);
+        ]);*/
+        return $response->fromJsonString($result);
     }
 
     #[Route('/{id}', name: 'app_celda_show', methods: ['GET'])]
@@ -57,8 +59,9 @@ class CeldaController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_celda_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Celda $celda, CeldaRepository $celdaRepository): Response
+    #[Route('/{id}/categoria', name: 'app_celda_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Celda $celda, CeldaRepository $celdaRepository,
+    CategoriaButacaRepository $categoriaButaca, SerializerInterface $serializer): JsonResponse
     {
         $form = $this->createForm(CeldaType::class, $celda);
         $form->handleRequest($request);
