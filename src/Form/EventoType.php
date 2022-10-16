@@ -19,7 +19,6 @@ class EventoType extends AbstractType
             ->add('horaInicio')
             ->add('fechaFin')
             ->add('horaFin')
-            ->add('salaDeEventos')
         ;
     }
 
@@ -27,6 +26,7 @@ class EventoType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Evento::class,
+            'csrf_protection' => false,
         ]);
     }
 }

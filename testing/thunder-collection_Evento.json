@@ -1,0 +1,78 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Evento",
+    "dateExported": "2022-10-16T07:52:07.461Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "8636e3a7-0dc2-49d3-b9cb-b2069e91e6a0",
+            "colId": "efdeaf46-b7ef-4022-8727-6e7bc9e85d97",
+            "containerId": "",
+            "name": "Lista Eventos",
+            "url": "localhost:8000/evento/",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2022-10-16T07:17:05.034Z",
+            "modified": "2022-10-16T07:17:05.034Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "aea2e1df-5821-4082-adc5-fc072c0e74cb",
+            "colId": "efdeaf46-b7ef-4022-8727-6e7bc9e85d97",
+            "containerId": "",
+            "name": "Nuevo ERROR",
+            "url": "localhost:8000/evento/new?evento[nombre]=Conferencia COMPDES&evento[descripcion]=Conferencia Iberoamericana&evento[tipoDeEvento]=Conferencia&evento[fechaInicio]=2022/10/17 &evento[horaInicio]=13:46&evento[fechaFin]=2022/10/17&evento[horaFin]=20:46 &evento[categoria]=1",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2022-10-16T07:17:20.079Z",
+            "modified": "2022-10-16T07:48:28.404Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "evento[nombre]",
+                    "value": "Conferencia COMPDES",
+                    "isPath": false
+                },
+                {
+                    "name": "evento[descripcion]",
+                    "value": "Conferencia Iberoamericana",
+                    "isPath": false
+                },
+                {
+                    "name": "evento[tipoDeEvento]",
+                    "value": "Conferencia",
+                    "isPath": false
+                },
+                {
+                    "name": "evento[fechaInicio]",
+                    "value": "2022/10/17 ",
+                    "isPath": false
+                },
+                {
+                    "name": "evento[horaInicio]",
+                    "value": "13:46",
+                    "isPath": false
+                },
+                {
+                    "name": "evento[fechaFin]",
+                    "value": "2022/10/17",
+                    "isPath": false
+                },
+                {
+                    "name": "evento[horaFin]",
+                    "value": "20:46 ",
+                    "isPath": false
+                },
+                {
+                    "name": "evento[categoria]",
+                    "value": "1",
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

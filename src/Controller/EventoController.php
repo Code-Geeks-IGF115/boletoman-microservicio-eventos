@@ -11,99 +11,91 @@ use Symfony\Component\HttpFoundation\{Response, JsonResponse};
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use App\Service\ResponseHelper;
 use Exception;
 
 #[Route('/evento')]
 class EventoController extends AbstractController
 {
-    #[Route('/', name: 'app_evento_index', methods: ['GET'])]
-   // public function index(
-       // EventoRepository $eventoRepository, 
-       // SerializerInterface $serializer): JsonResponse
-    //{
-      //  $eventos=$eventoRepository->findAll();
-       // $result= $serializer->serialize(['eventos'=>$eventos],'json');
-       // return JsonResponse::fromJsonString($result);
-    //}
-    public function index(EventoRepository $eventoRepository): Response
+    private ResponseHelper $responseHelper;
+
+    public function __construct(ResponseHelper $responseHelper)
     {
-        return $this->render('evento/index.html.twig', [
-            'eventos' => $eventoRepository->findAll(),
-        ]);
+        $this->responseHelper=$responseHelper;
     }
+
+    #[Route('/', name: 'app_evento_index', methods: ['GET'])]
+    public function index(EventoRepository $eventoRepository): JsonResponse
+    {
+        $eventos=$eventoRepository->findAll();
+        return $this->responseHelper->responseDatos(['eventos'=>$eventos]);
+    }
+    
 
     #[Route('/new', name: 'app_evento_new', methods: ['POST'])]
-    public function new(Request $request, Evento $eventos, EventoRepository $eventoRepository, SerializerInterface $serializer): JsonResponse
-   
-    {   $response=new JsonResponse();
-        
-        $form = $this->createForm(EventoType::class, $eventos);
+    public function new(Request $request, 
+    EventoRepository $eventoRepository): JsonResponse
+   {   
+        $evento = new Evento();
+        $form = $this->createForm(EventoType::class, $evento);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-           try{
 
-                $eventoRepository->save($eventos, true);
-                $result= $serializer->serialize(['message'=>"Evento guardado."],'json');
-                return $response->fromJsonString($result);
-
-            }catch(Exception $e){
-                $result= $serializer->serialize(['message'=>"Datos no válidos."],'json');
-                $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-                return $response->fromJsonString($result);
-            }
-
-        }      
-
-    }
-
-    #[Route('/{id}', name: 'app_evento_show', methods: ['GET'])]
-    public function show(Evento $evento): Response
-    {
-        $response=new JsonResponse();
-        return $this->render('evento/show.html.twig', [
-            'evento' => $evento,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_evento_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Evento $eventos, EventoRepository $eventoRepository, SerializerInterface $serializer): JsonResponse
-    {
-        $response=new JsonResponse();
-
-        $form = $this->createForm(EventoType::class, $eventos);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            try{
-
-            $eventoRepository->save($eventos, true);
-            $result= $serializer->serialize(['message'=>"Evento actualizado"],'json');
-            
-            return $response->fromJsonString($result);
-            
-        }catch(Exception $e){
-                $result= $serializer->serialize(['message'=>"Datos no validos."],'json');
-                $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            $eventoRepository->save($evento, true);
+            $result= $this->responseHelper->responseMessage("Evento guardado.");
                 
-                return $response->fromJsonString($result);
-            }
         }
         else{
-
-            $result= $serializer->serialize(['message'=>"Datos invalidos."],'json');
-            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-            return $response->fromJsonString($result);
+            $result= $this->responseHelper->responseDatosNoValidos();
+                
         }
+        return $result;
+    }      
+
+
+    #[Route('/{id}', name: 'app_evento_show', methods: ['GET'])]
+    public function show(Evento $evento = null): JsonResponse
+    {
+        if(empty($evento)){
+            $result= $this->responseHelper->responseMessage("No se encontró el evento solicitado.");
+        }
+        else{
+            $result = $this->responseHelper->responseDatos(['evento'=>$evento]);
+        } 
+        return $result;   
+    }
+
+    #[Route('/{id}/edit', name: 'app_evento_edit', methods: ['POST'])]
+    public function edit(Request $request, Evento $evento = null, 
+    EventoRepository $eventoRepository, SerializerInterface $serializer): JsonResponse
+    {
+        if(empty($evento)){
+            $result= $this->responseHelper->responseMessage("No se encontró el evento solicitado."); 
+        }
+        else{
+            $form = $this->createForm(EventoType::class, $evento);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $eventoRepository->save($evento, true);
+                $result= $this->responseHelper->responseMessage("El evento se ha modificado.");
+            }
+            else{
+                $result= $this->responseHelper->responseDatosNoValidos();  
+            }
+        } 
+        return $result;
     }
 
     #[Route('/{id}', name: 'app_evento_delete', methods: ['POST'])]
-    public function delete(Request $request, Evento $evento, EventoRepository $eventoRepository): Response
+    public function delete(Request $request, Evento $evento= null, EventoRepository $eventoRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$evento->getId(), $request->request->get('_token'))) {
+        if(empty($evento)){
+            $result= $this->responseHelper->responseMessage("No se encontró el evento solicitado."); 
+        }else{
             $eventoRepository->remove($evento, true);
-        }
+        }        
 
-        return $this->redirectToRoute('app_evento_index', [], Response::HTTP_SEE_OTHER);
+        return $this->responseHelper->responseMessage("Evento eliminado.");
     }
 }
