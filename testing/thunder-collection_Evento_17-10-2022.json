@@ -1,34 +1,34 @@
 {
     "client": "Thunder Client",
     "collectionName": "Evento",
-    "dateExported": "2022-10-17T04:49:10.816Z",
+    "dateExported": "2022-10-17T17:07:24.345Z",
     "version": "1.1",
     "folders": [],
     "requests": [
         {
-            "_id": "1f3c64de-82fa-4b5e-bf40-22b1b5b44b28",
-            "colId": "cd7eb098-2f3d-4707-bf9c-0a01b3c944b2",
+            "_id": "39f079ba-5cf0-4f0c-95d4-f9653840a1ae",
+            "colId": "0be2d3a9-82ed-455f-8697-f0685b603c11",
             "containerId": "",
             "name": "Lista Eventos",
             "url": "localhost:8000/evento/",
             "method": "GET",
             "sortNum": 10000,
-            "created": "2022-10-17T04:48:39.062Z",
-            "modified": "2022-10-17T04:48:39.062Z",
+            "created": "2022-10-17T16:50:03.938Z",
+            "modified": "2022-10-17T16:50:03.938Z",
             "headers": [],
             "params": [],
             "tests": []
         },
         {
-            "_id": "7240a53c-aa39-4ce6-ba3c-74a8457d140e",
-            "colId": "cd7eb098-2f3d-4707-bf9c-0a01b3c944b2",
+            "_id": "362a6d4f-3408-440e-b69f-a3a7bdf9fd8e",
+            "colId": "0be2d3a9-82ed-455f-8697-f0685b603c11",
             "containerId": "",
             "name": "Lista Eventos por categoria",
             "url": "http://localhost:8000/evento/?categoria=1",
             "method": "GET",
             "sortNum": 15000,
-            "created": "2022-10-17T04:48:39.063Z",
-            "modified": "2022-10-17T04:48:39.063Z",
+            "created": "2022-10-17T16:50:03.939Z",
+            "modified": "2022-10-17T16:50:03.939Z",
             "headers": [],
             "params": [
                 {
@@ -40,15 +40,15 @@
             "tests": []
         },
         {
-            "_id": "356cd1c7-0f90-4950-a6a0-034d19b18669",
-            "colId": "cd7eb098-2f3d-4707-bf9c-0a01b3c944b2",
+            "_id": "a12dab86-96ca-47a1-b23f-e19255ee7602",
+            "colId": "0be2d3a9-82ed-455f-8697-f0685b603c11",
             "containerId": "",
             "name": "Nuevo ERROR",
-            "url": "localhost:8000/evento/new?evento[nombre]=Conferencia COMPDES&evento[descripcion]=Conferencia Iberoamericana&evento[tipoDeEvento]=Conferencia&evento[fechaInicio]=2022-10-17T07:17:20.079Z &evento[horaInicio]=2022-10-17T07:17:20.079Z&evento[fechaFin]=2022-10-17T07:17:20.079Z&evento[horaFin]=2022-10-17T07:17:20.079Z &evento[categoria]=1",
+            "url": "localhost:8000/evento/new",
             "method": "POST",
             "sortNum": 20000,
-            "created": "2022-10-17T04:48:39.064Z",
-            "modified": "2022-10-17T04:49:08.232Z",
+            "created": "2022-10-17T16:50:03.940Z",
+            "modified": "2022-10-17T17:06:50.155Z",
             "headers": [],
             "params": [],
             "body": {
@@ -57,35 +57,35 @@
                 "form": [
                     {
                         "name": "evento[nombre]",
-                        "value": "Conferencia COMPDES"
+                        "value": "Conferencia COMPDES 2"
                     },
                     {
                         "name": "evento[descripcion]",
-                        "value": "Conferencia Iberoamericana"
+                        "value": "Conferencia Iberoamericana 2"
                     },
                     {
                         "name": "evento[tipoDeEvento]",
-                        "value": "Conferencia"
+                        "value": "Conferencia 2"
                     },
                     {
                         "name": "evento[fechaInicio]",
-                        "value": "2022-10-17T07:17:20.079Z "
+                        "value": "2022-10-18"
                     },
                     {
                         "name": "evento[horaInicio]",
-                        "value": "2022-10-17T07:17:20.079Z"
+                        "value": "10:00"
                     },
                     {
                         "name": "evento[fechaFin]",
-                        "value": "2022-10-17T07:17:20.079Z"
+                        "value": "2022-10-18"
                     },
                     {
                         "name": "evento[horaFin]",
-                        "value": "2022-10-17T07:17:20.079Z "
+                        "value": "11:00"
                     },
                     {
                         "name": "evento[categoria]",
-                        "value": "1"
+                        "value": "2"
                     }
                 ]
             },

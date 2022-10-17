@@ -6,8 +6,7 @@ use App\Entity\Evento;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TimeType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\{DateType,TimeType};
 
 class EventoType extends AbstractType
 {
@@ -18,10 +17,22 @@ class EventoType extends AbstractType
             ->add('descripcion')
             ->add('tipoDeEvento')
             ->add('categoria')
-            // ->add('fechaInicio')
-            // ->add('horaInicio')
-            // ->add('fechaFin')
-            // ->add('horaFin')
+            ->add('fechaInicio', DateType::class, [
+                'widget' => 'single_text',
+                'input'  => 'string'
+            ])
+            ->add('horaInicio', TimeType::class, [
+                'widget' =>  'single_text',
+                'input'  => 'string'
+            ])
+            ->add('fechaFin', DateType::class, [
+                'widget' =>  'single_text',
+                'input'  => 'string'
+            ])
+            ->add('horaFin', TimeType::class, [
+                'widget' =>  'single_text',
+                'input'  => 'string'
+            ])
         ;
     }
 

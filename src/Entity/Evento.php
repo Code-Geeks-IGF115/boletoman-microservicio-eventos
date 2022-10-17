@@ -8,7 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert; //agregue la funcion 
+use Symfony\Component\Validator\Constraints as Assert;
+use DateTime; 
 
 #[ORM\Entity(repositoryClass: EventoRepository::class)]
 class Evento
@@ -35,26 +36,26 @@ class Evento
      */
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['ver_evento'])]
-    private ?\DateTimeInterface $fechaInicio = null;
+    private ?DateTime $fechaInicio = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     #[Groups(['ver_evento'])]
-    private ?\DateTimeInterface $horaInicio = null;
+    private ?DateTime $horaInicio = null;
  /**
      * @Assert\GreaterThanOrEqual(propertyPath="fechaInicio")
      */
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['ver_evento'])]
-    private ?\DateTimeInterface $fechaFin = null;
+    private ?DateTime $fechaFin = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     #[Groups(['ver_evento'])]
-    private ?\DateTimeInterface $horaFin = null;
+    private ?DateTime $horaFin = null;
 
     #[ORM\OneToMany(mappedBy: 'evento', targetEntity: Imagen::class, orphanRemoval: true)]
     private Collection $imagens;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable:true)]     
     private ?int $sala_de_eventos_id = null;
 
     #[ORM\ManyToOne(inversedBy: 'eventos')]
@@ -114,54 +115,66 @@ class Evento
         return $this;
     }
 
-    public function getFechaInicio(): ?\DateTimeInterface
+    public function getFechaInicio(): ?DateTime
     {
         return $this->fechaInicio;
     }
 
-    public function setFechaInicio(\DateTimeInterface $fechaInicio): self
-    {
-        $this->fechaInicio = $fechaInicio;
-
-        return $this;
-    }
-
-    public function getHoraInicio(): ?\DateTimeInterface
+    public function getHoraInicio(): ?DateTime
     {
         return $this->horaInicio;
     }
 
-    public function setHoraInicio(\DateTimeInterface $horaInicio): self
-    {
-        $this->horaInicio = $horaInicio;
-
-        return $this;
-    }
-
-    public function getFechaFin(): ?\DateTimeInterface
+    public function getFechaFin(): ?DateTime
     {
         return $this->fechaFin;
     }
 
-    public function setFechaFin(\DateTimeInterface $fechaFin): self
-    {
-        $this->fechaFin = $fechaFin;
-
-        return $this;
-    }
-
-    public function getHoraFin(): ?\DateTimeInterface
+    public function getHoraFin(): ?DateTime
     {
         return $this->horaFin;
     }
 
-    public function setHoraFin(\DateTimeInterface $horaFin): self
+    //conviertiendo a DateTime
+    public function setHoraInicio(string $horaInicio=null): self
     {
-        $this->horaFin = $horaFin;
-
+        if($horaInicio){
+            $this->horaInicio = date_create( $horaInicio);
+        }else{
+            $this->horaInicio=$horaInicio;
+        }
         return $this;
     }
 
+    public function setHoraFin(string $horaFin): self
+    {
+        if($horaFin){
+            $this->horaFin = date_create($horaFin);
+        }else{
+            $this->horaFin=$horaFin;
+        }
+        return $this;
+    }
+
+    public function setFechaInicio(string $fechaInicio): self
+    {
+        if($fechaInicio){
+            $this->fechaInicio =date_create($fechaInicio);
+        }else{
+            $this->fechaInicio=$fechaInicio;
+        }
+        return $this;
+    }
+
+    public function setFechaFin(string $fechaFin): self
+    {
+        if($fechaFin){
+            $this->fechaFin = date_create($fechaFin);
+        }else{
+            $this->fechaFin=$fechaFin;
+        }
+        return $this;
+    }
    
     /**
      * @return Collection<int, Imagen>
