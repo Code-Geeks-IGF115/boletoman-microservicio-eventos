@@ -17,6 +17,7 @@ class EventoType extends AbstractType
             ->add('descripcion')
             ->add('tipoDeEvento')
             ->add('categoria')
+            ->add('telefono')
             ->add('fechaInicio', DateType::class, [
                 'widget' => 'single_text',
                 'input'  => 'string'
@@ -41,6 +42,7 @@ class EventoType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Evento::class,
             'csrf_protection' => false,
+            'allow_extra_fields' => true,
         ]);
     }
 }

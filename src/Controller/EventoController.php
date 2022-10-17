@@ -64,7 +64,7 @@ class EventoController extends AbstractController
                 $result= $this->responseHelper->responseDatosNoValidos();
             }
         }catch(Exception $e){
-            $result= $this->responseHelper->responseMessage($e->getMessage());
+            $result= $this->responseHelper->responseDatosNoValidos();
         }
         return $result;
     }      

@@ -28,6 +28,10 @@ class Evento
     #[Groups(['ver_evento'])]
     private ?string $descripcion = null;
 
+    #[ORM\Column(length: 9)]
+    #[Groups(['ver_evento'])]
+    private ?string $telefono = null;
+
     #[ORM\Column(length: 25)]
     #[Groups(['ver_evento'])]
     private ?string $tipoDeEvento = null;
@@ -99,6 +103,18 @@ class Evento
     public function setDescripcion(string $descripcion): self
     {
         $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    public function getTelefono(): ?string
+    {
+        return $this->telefono;
+    }
+
+    public function setTelefono(string $telefono): self
+    {
+        $this->telefono = $telefono;
 
         return $this;
     }
