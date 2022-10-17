@@ -1,0 +1,95 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Evento",
+    "dateExported": "2022-10-17T04:49:10.816Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "1f3c64de-82fa-4b5e-bf40-22b1b5b44b28",
+            "colId": "cd7eb098-2f3d-4707-bf9c-0a01b3c944b2",
+            "containerId": "",
+            "name": "Lista Eventos",
+            "url": "localhost:8000/evento/",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2022-10-17T04:48:39.062Z",
+            "modified": "2022-10-17T04:48:39.062Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "7240a53c-aa39-4ce6-ba3c-74a8457d140e",
+            "colId": "cd7eb098-2f3d-4707-bf9c-0a01b3c944b2",
+            "containerId": "",
+            "name": "Lista Eventos por categoria",
+            "url": "http://localhost:8000/evento/?categoria=1",
+            "method": "GET",
+            "sortNum": 15000,
+            "created": "2022-10-17T04:48:39.063Z",
+            "modified": "2022-10-17T04:48:39.063Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "categoria",
+                    "value": "1",
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "356cd1c7-0f90-4950-a6a0-034d19b18669",
+            "colId": "cd7eb098-2f3d-4707-bf9c-0a01b3c944b2",
+            "containerId": "",
+            "name": "Nuevo ERROR",
+            "url": "localhost:8000/evento/new?evento[nombre]=Conferencia COMPDES&evento[descripcion]=Conferencia Iberoamericana&evento[tipoDeEvento]=Conferencia&evento[fechaInicio]=2022-10-17T07:17:20.079Z &evento[horaInicio]=2022-10-17T07:17:20.079Z&evento[fechaFin]=2022-10-17T07:17:20.079Z&evento[horaFin]=2022-10-17T07:17:20.079Z &evento[categoria]=1",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2022-10-17T04:48:39.064Z",
+            "modified": "2022-10-17T04:49:08.232Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "evento[nombre]",
+                        "value": "Conferencia COMPDES"
+                    },
+                    {
+                        "name": "evento[descripcion]",
+                        "value": "Conferencia Iberoamericana"
+                    },
+                    {
+                        "name": "evento[tipoDeEvento]",
+                        "value": "Conferencia"
+                    },
+                    {
+                        "name": "evento[fechaInicio]",
+                        "value": "2022-10-17T07:17:20.079Z "
+                    },
+                    {
+                        "name": "evento[horaInicio]",
+                        "value": "2022-10-17T07:17:20.079Z"
+                    },
+                    {
+                        "name": "evento[fechaFin]",
+                        "value": "2022-10-17T07:17:20.079Z"
+                    },
+                    {
+                        "name": "evento[horaFin]",
+                        "value": "2022-10-17T07:17:20.079Z "
+                    },
+                    {
+                        "name": "evento[categoria]",
+                        "value": "1"
+                    }
+                ]
+            },
+            "tests": []
+        }
+    ]
+}

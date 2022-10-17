@@ -1,75 +1,88 @@
 {
     "client": "Thunder Client",
     "collectionName": "Evento",
-    "dateExported": "2022-10-16T07:52:07.461Z",
+    "dateExported": "2022-10-17T04:46:46.944Z",
     "version": "1.1",
     "folders": [],
     "requests": [
         {
-            "_id": "8636e3a7-0dc2-49d3-b9cb-b2069e91e6a0",
-            "colId": "efdeaf46-b7ef-4022-8727-6e7bc9e85d97",
+            "_id": "a45d0199-84bd-4a8d-91ae-bd2a5d0a720e",
+            "colId": "8a5bf550-63df-4f6a-96c3-1a390ee6e881",
             "containerId": "",
             "name": "Lista Eventos",
             "url": "localhost:8000/evento/",
             "method": "GET",
             "sortNum": 10000,
-            "created": "2022-10-16T07:17:05.034Z",
-            "modified": "2022-10-16T07:17:05.034Z",
+            "created": "2022-10-16T07:52:59.425Z",
+            "modified": "2022-10-16T07:52:59.425Z",
             "headers": [],
             "params": [],
             "tests": []
         },
         {
-            "_id": "aea2e1df-5821-4082-adc5-fc072c0e74cb",
-            "colId": "efdeaf46-b7ef-4022-8727-6e7bc9e85d97",
+            "_id": "d5971105-21c2-404b-8bef-d619aca9ef55",
+            "colId": "8a5bf550-63df-4f6a-96c3-1a390ee6e881",
+            "containerId": "",
+            "name": "Lista Eventos por categoria",
+            "url": "http://localhost:8000/evento/?categoria=1",
+            "method": "GET",
+            "sortNum": 15000,
+            "created": "2022-10-17T04:46:08.303Z",
+            "modified": "2022-10-17T04:46:29.045Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "categoria",
+                    "value": "1",
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "04f19d2e-2cef-413b-be3c-fb7b778e6c6e",
+            "colId": "8a5bf550-63df-4f6a-96c3-1a390ee6e881",
             "containerId": "",
             "name": "Nuevo ERROR",
-            "url": "localhost:8000/evento/new?evento[nombre]=Conferencia COMPDES&evento[descripcion]=Conferencia Iberoamericana&evento[tipoDeEvento]=Conferencia&evento[fechaInicio]=2022/10/17 &evento[horaInicio]=13:46&evento[fechaFin]=2022/10/17&evento[horaFin]=20:46 &evento[categoria]=1",
+            "url": "localhost:8000/evento/new?evento[nombre]=Conferencia COMPDES&evento[descripcion]=Conferencia Iberoamericana&evento[tipoDeEvento]=Conferencia&evento[fechaInicio]=2022-10-17T07:17:20.079Z &evento[horaInicio]=2022-10-17T07:17:20.079Z&evento[fechaFin]=2022-10-17T07:17:20.079Z&evento[horaFin]=2022-10-17T07:17:20.079Z &evento[categoria]=1",
             "method": "POST",
             "sortNum": 20000,
-            "created": "2022-10-16T07:17:20.079Z",
-            "modified": "2022-10-16T07:48:28.404Z",
+            "created": "2022-10-16T07:52:59.426Z",
+            "modified": "2022-10-16T07:54:15.748Z",
             "headers": [],
             "params": [
                 {
                     "name": "evento[nombre]",
-                    "value": "Conferencia COMPDES",
-                    "isPath": false
+                    "value": "Conferencia COMPDES"
                 },
                 {
                     "name": "evento[descripcion]",
-                    "value": "Conferencia Iberoamericana",
-                    "isPath": false
+                    "value": "Conferencia Iberoamericana"
                 },
                 {
                     "name": "evento[tipoDeEvento]",
-                    "value": "Conferencia",
-                    "isPath": false
+                    "value": "Conferencia"
                 },
                 {
                     "name": "evento[fechaInicio]",
-                    "value": "2022/10/17 ",
-                    "isPath": false
+                    "value": "2022-10-17T07:17:20.079Z "
                 },
                 {
                     "name": "evento[horaInicio]",
-                    "value": "13:46",
-                    "isPath": false
+                    "value": "2022-10-17T07:17:20.079Z"
                 },
                 {
                     "name": "evento[fechaFin]",
-                    "value": "2022/10/17",
-                    "isPath": false
+                    "value": "2022-10-17T07:17:20.079Z"
                 },
                 {
                     "name": "evento[horaFin]",
-                    "value": "20:46 ",
-                    "isPath": false
+                    "value": "2022-10-17T07:17:20.079Z "
                 },
                 {
                     "name": "evento[categoria]",
                     "value": "1",
-                    "isPath": false
+                    "isPath": true
                 }
             ],
             "tests": []

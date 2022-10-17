@@ -51,20 +51,33 @@ class EventoController extends AbstractController
     #[Route('/new', name: 'app_evento_new', methods: ['POST'])]
     public function new(Request $request, 
     EventoRepository $eventoRepository): JsonResponse
-   {   
-        $evento = new Evento();
-        $form = $this->createForm(EventoType::class, $evento);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+   {   try{
 
+        $fechaInicio=$request->query->get('fechaInicio', null);
+        $horaInicio=$request->query->get('horaInicio', null);
+        $fechaFin=$request->query->get('fechaFin', null);
+        $horaFin=$request->query->get('horaFin', null);
+
+       $evento = new Evento();
+       $form = $this->createForm(EventoType::class, $evento);
+       $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            //creando manualmente las fechas y horas
+            
             $eventoRepository->save($evento, true);
             $result= $this->responseHelper->responseMessage("Evento guardado.");
                 
+        }else{
+
+            $result= $this->responseHelper->responseMessage("😥");
         }
-        else{
-            $result= $this->responseHelper->responseDatosNoValidos();
+    }catch(Exception $e){
+            $result= $this->responseHelper->responseMessage($e->getMessage());
+        }
+        // else{
+        //     $result= $this->responseHelper->responseDatosNoValidos();
                 
-        }
+        // }
         return $result;
     }      
 
