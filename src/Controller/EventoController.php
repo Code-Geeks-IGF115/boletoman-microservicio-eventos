@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Evento;
 use App\Form\EventoType;
+use App\Repository\CategoriaEventoRepository;
 use App\Repository\EventoRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,21 +14,36 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use App\Service\ResponseHelper;
 use Exception;
+use Psr\Log\LoggerInterface;
 
 #[Route('/evento')]
 class EventoController extends AbstractController
 {
     private ResponseHelper $responseHelper;
+    private LoggerInterface $logger;
 
-    public function __construct(ResponseHelper $responseHelper)
+    public function __construct(ResponseHelper $responseHelper, LoggerInterface $logger)
     {
         $this->responseHelper=$responseHelper;
+        $this->logger=$logger;
     }
 
     #[Route('/', name: 'app_evento_index', methods: ['GET'])]
-    public function index(EventoRepository $eventoRepository): JsonResponse
+    public function index(
+        Request $request, 
+        EventoRepository $eventoRepository,
+        CategoriaEventoRepository $categoriaEventoRepository
+    ): JsonResponse
     {
-        $eventos=$eventoRepository->findAll();
+        $categoriaId=$request->query->get('categoria', null);
+        $this->logger->info($categoriaId);
+        //si no se agrega categoria, entonces recupera todos los eventos
+        if(!$categoriaId){
+            $eventos=$eventoRepository->findAll();
+        }else{
+            $categoria=$categoriaEventoRepository->find(intval($categoriaId));
+            $eventos=$categoria->getEventos();
+        }
         return $this->responseHelper->responseDatos(['eventos'=>$eventos],['ver_evento']);
     }
     
