@@ -16,31 +16,39 @@ class Evento
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['ver_evento'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['ver_evento'])]
     private ?string $nombre = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['ver_evento'])]
     private ?string $descripcion = null;
 
     #[ORM\Column(length: 25)]
+    #[Groups(['ver_evento'])]
     private ?string $tipoDeEvento = null;
  /**
      * @Assert\GreaterThanOrEqual("today")
      */
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['ver_evento'])]
     private ?\DateTimeInterface $fechaInicio = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Groups(['ver_evento'])]
     private ?\DateTimeInterface $horaInicio = null;
  /**
      * @Assert\GreaterThanOrEqual(propertyPath="fechaInicio")
      */
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['ver_evento'])]
     private ?\DateTimeInterface $fechaFin = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Groups(['ver_evento'])]
     private ?\DateTimeInterface $horaFin = null;
 
     #[ORM\OneToMany(mappedBy: 'evento', targetEntity: Imagen::class, orphanRemoval: true)]
@@ -51,6 +59,7 @@ class Evento
 
     #[ORM\ManyToOne(inversedBy: 'eventos')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['ver_evento'])]
     private ?CategoriaEvento $categoria = null;
 
     public function __construct()

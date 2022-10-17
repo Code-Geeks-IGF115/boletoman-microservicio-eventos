@@ -6,6 +6,7 @@ use App\Repository\CategoriaEventoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoriaEventoRepository::class)]
 class CategoriaEvento
@@ -13,11 +14,13 @@ class CategoriaEvento
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['ver_evento'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['ver_evento'])]
     private ?string $nombre = null;
-
+    
     #[ORM\OneToMany(mappedBy: 'categoria', targetEntity: Evento::class)]
     private Collection $eventos;
 

@@ -28,7 +28,7 @@ class EventoController extends AbstractController
     public function index(EventoRepository $eventoRepository): JsonResponse
     {
         $eventos=$eventoRepository->findAll();
-        return $this->responseHelper->responseDatos(['eventos'=>$eventos]);
+        return $this->responseHelper->responseDatos(['eventos'=>$eventos],['ver_evento']);
     }
     
 
