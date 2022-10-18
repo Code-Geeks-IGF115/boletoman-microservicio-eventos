@@ -58,7 +58,7 @@ class EventoController extends AbstractController
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $eventoRepository->save($evento, true);
-                $result= $this->responseHelper->responseMessage("Evento guardado.");
+                $result= $this->responseHelper->responseDatos(['message'=>"Evento guardado.",'id'=>$evento->getId()]);
                     
             }else{
                 $result= $this->responseHelper->responseDatosNoValidos();
