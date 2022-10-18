@@ -63,9 +63,13 @@ class Evento
     #[Groups(['ver_evento'])]
     private ?CategoriaEvento $categoria = null;
 
+    #[ORM\OneToMany(mappedBy: 'evento', targetEntity: Frecuencia::class, orphanRemoval: true)]
+    private Collection $concurrencia;
+
     public function __construct()
     {
         $this->imagens = new ArrayCollection();
+        $this->concurrencia = new ArrayCollection();
     }
 
     public function __toString() {
@@ -226,6 +230,36 @@ class Evento
     public function setCategoria(?CategoriaEvento $categoria): self
     {
         $this->categoria = $categoria;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Frecuencia>
+     */
+    public function getConcurrencia(): Collection
+    {
+        return $this->concurrencia;
+    }
+
+    public function addConcurrencium(Frecuencia $concurrencium): self
+    {
+        if (!$this->concurrencia->contains($concurrencium)) {
+            $this->concurrencia->add($concurrencium);
+            $concurrencium->setEvento($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConcurrencium(Frecuencia $concurrencium): self
+    {
+        if ($this->concurrencia->removeElement($concurrencium)) {
+            // set the owning side to null (unless already changed)
+            if ($concurrencium->getEvento() === $this) {
+                $concurrencium->setEvento(null);
+            }
+        }
 
         return $this;
     }

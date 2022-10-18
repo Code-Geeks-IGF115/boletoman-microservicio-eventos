@@ -19,6 +19,10 @@ class Frecuencia
     #[ORM\Column]
     private ?bool $checked = null;
 
+    #[ORM\ManyToOne(inversedBy: 'concurrencia')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Evento $evento = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +48,18 @@ class Frecuencia
     public function setChecked(bool $checked): self
     {
         $this->checked = $checked;
+
+        return $this;
+    }
+
+    public function getEvento(): ?Evento
+    {
+        return $this->evento;
+    }
+
+    public function setEvento(?Evento $evento): self
+    {
+        $this->evento = $evento;
 
         return $this;
     }

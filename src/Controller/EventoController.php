@@ -14,6 +14,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use App\Service\ResponseHelper;
 use Exception;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use Psr\Log\LoggerInterface;
 
 #[Route('/evento')]
@@ -52,6 +53,12 @@ class EventoController extends AbstractController
     public function new(Request $request, 
     EventoRepository $eventoRepository): JsonResponse
    {   
+        // // recuperando concurrencia
+        // $data=$request->request->get('evento', null);
+        // $concurrencia=$data['concurrencia'];
+        // $frecuencias=array();
+        // Var_dump($concurrencia);
+
         try{
             $evento = new Evento();
             $form = $this->createForm(EventoType::class, $evento);
