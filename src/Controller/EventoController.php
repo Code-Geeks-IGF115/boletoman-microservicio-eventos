@@ -57,16 +57,24 @@ class EventoController extends AbstractController
     FrecuenciaRepository $frecuenciaRepository): JsonResponse
    {   
         // recuperando frecuencias
-        $data=$request->request->get('evento', null);        
-        $frecuencias=array();
-        $frecuencias[]=boolval($data['lunes']);
-        $frecuencias[]=boolval($data['martes']);
-        $frecuencias[]=boolval($data['miercoles']);
-        $frecuencias[]=boolval($data['jueves']);
-        $frecuencias[]=boolval($data['viernes']);
-        $frecuencias[]=boolval($data['sabado']);
-        $frecuencias[]=boolval($data['domingo']);
-        // Var_dump($frecuencias);
+        $data=$request->request->get('nombre', null);        
+        $parametros=$request->request->all(); 
+        $evento=array();
+        foreach ($parametros as $key => $parametro) {
+            $evento[$key]=$parametro;
+        }
+
+        // $frecuencias=array();
+        // $frecuencias[]=boolval($data['lunes']);
+        // $frecuencias[]=boolval($data['martes']);
+        // $frecuencias[]=boolval($data['miercoles']);
+        // $frecuencias[]=boolval($data['jueves']);
+        // $frecuencias[]=boolval($data['viernes']);
+        // $frecuencias[]=boolval($data['sabado']);
+        // $frecuencias[]=boolval($data['domingo']);
+        // Var_dump($parametros);
+        $request->request->replace($evento);
+        Var_dump($request);
 
         try{
             $evento = new Evento();
