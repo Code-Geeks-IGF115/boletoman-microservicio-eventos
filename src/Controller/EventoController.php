@@ -103,7 +103,7 @@ class EventoController extends AbstractController
             $result= $this->responseHelper->responseMessage("No se encontró el evento solicitado.");
         }
         else{
-            $result = $this->responseHelper->responseDatos(['evento'=>$evento]);
+            $result = $this->responseHelper->responseDatos(['evento'=>$evento],['ver_evento']);
         } 
         return $result;   
     }
