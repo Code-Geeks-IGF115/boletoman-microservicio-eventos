@@ -37,7 +37,6 @@ class EventoController extends AbstractController
     ): JsonResponse
     {
         $categoriaId=$request->query->get('categoria', null);
-        $this->logger->info($categoriaId);
         //si no se agrega categoria, entonces recupera todos los eventos
         if(!$categoriaId){
             $eventos=$eventoRepository->findAll();
