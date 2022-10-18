@@ -61,7 +61,7 @@ class EventoController extends AbstractController
                 $result= $this->responseHelper->responseDatos(['message'=>"Evento guardado.",'id'=>$evento->getId()]);
                     
             }else{
-                $result= $this->responseHelper->responseDatosNoValidos();
+                $result= $this->responseHelper->responseDatos($form->getErrors(true));
             }
         }catch(Exception $e){
             $result= $this->responseHelper->responseMessage($e->getMessage());
