@@ -60,13 +60,13 @@ class EventoController extends AbstractController
         $request->request->replace(["evento"=>$parametros]);
         
         $frecuencias=array();
-        $frecuencias[]=boolval($parametros['lunes']);
-        $frecuencias[]=boolval($parametros['martes']);
-        $frecuencias[]=boolval($parametros['miercoles']);
-        $frecuencias[]=boolval($parametros['jueves']);
-        $frecuencias[]=boolval($parametros['viernes']);
-        $frecuencias[]=boolval($parametros['sabado']);
-        $frecuencias[]=boolval($parametros['domingo']);
+        $frecuencias[]=($parametros['lunes']===true)? true:false;
+        $frecuencias[]=($parametros['martes']===true)? true:false;
+        $frecuencias[]=($parametros['miercoles']===true)? true:false;
+        $frecuencias[]=($parametros['jueves']===true)? true:false;
+        $frecuencias[]=($parametros['viernes']===true)? true:false;
+        $frecuencias[]=($parametros['sabado']===true)? true:false;
+        $frecuencias[]=($parametros['domingo']===true)? true:false;
         
         try{
             $eventoX = new Evento();
@@ -92,7 +92,7 @@ class EventoController extends AbstractController
         }catch(Exception $e){
             $result= $this->responseHelper->responseMessage($e->getMessage());
         }
-        return $this->responseHelper->responseDatos($request->request->all());
+        return $result;
     }      
 
 
