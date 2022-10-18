@@ -92,7 +92,7 @@ class EventoController extends AbstractController
         }catch(Exception $e){
             $result= $this->responseHelper->responseMessage($e->getMessage());
         }
-        return $result;
+        return $this->responseHelper->responseDatos($request->request->all());
     }      
 
 
