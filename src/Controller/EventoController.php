@@ -56,44 +56,38 @@ class EventoController extends AbstractController
     EventoRepository $eventoRepository,
     FrecuenciaRepository $frecuenciaRepository): JsonResponse
    {   
-        // recuperando frecuencias
-        $data=$request->request->get('nombre', null);        
+        // recuperando frecuencias   
         $parametros=$request->request->all(); 
-        $evento=array();
-        foreach ($parametros as $key => $parametro) {
-            $evento[$key]=$parametro;
-        }
-
-        // $frecuencias=array();
-        // $frecuencias[]=boolval($data['lunes']);
-        // $frecuencias[]=boolval($data['martes']);
-        // $frecuencias[]=boolval($data['miercoles']);
-        // $frecuencias[]=boolval($data['jueves']);
-        // $frecuencias[]=boolval($data['viernes']);
-        // $frecuencias[]=boolval($data['sabado']);
-        // $frecuencias[]=boolval($data['domingo']);
-        // Var_dump($parametros);
-        $request->request->replace($evento);
-        Var_dump($request);
-
+        $request->request->replace(["evento"=>$parametros]);
+        
+        $frecuencias=array();
+        $frecuencias[]=boolval($parametros['lunes']);
+        $frecuencias[]=boolval($parametros['martes']);
+        $frecuencias[]=boolval($parametros['miercoles']);
+        $frecuencias[]=boolval($parametros['jueves']);
+        $frecuencias[]=boolval($parametros['viernes']);
+        $frecuencias[]=boolval($parametros['sabado']);
+        $frecuencias[]=boolval($parametros['domingo']);
+        
         try{
-            $evento = new Evento();
-            $form = $this->createForm(EventoType::class, $evento);
+            $eventoX = new Evento();
+            $form = $this->createForm(EventoType::class, $eventoX);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $eventoRepository->save($evento, true);
+                $eventoRepository->save($eventoX, true);
                 // creando frecuencias
                 // nota: los dias inician en 1
                 foreach ($frecuencias as $dia => $isChecked) {
                     $frecuencia=new Frecuencia();
                     $frecuencia->setDia(++$dia);
                     $frecuencia->setChecked($isChecked);
-                    $frecuencia->setEvento($evento);
+                    $frecuencia->setEvento($eventoX);
                     $frecuenciaRepository->save($frecuencia,true);
                 }
-                $result= $this->responseHelper->responseDatos(['message'=>"Evento guardado.",'id'=>$evento->getId()]);
-                    
+                $result= $this->responseHelper->responseDatos(['message'=>"Evento guardado.",'id'=>$eventoX->getId()]);
+                
             }else{
+                var_dump($frecuencias);
                 $result= $this->responseHelper->responseDatos($form->getErrors(true));
             }
         }catch(Exception $e){
