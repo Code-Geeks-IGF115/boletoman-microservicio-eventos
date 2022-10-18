@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Evento;
+use App\Entity\Frecuencia;
 use App\Form\EventoType;
 use App\Repository\CategoriaEventoRepository;
 use App\Repository\EventoRepository;
+use App\Repository\FrecuenciaRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\{Response, JsonResponse};
@@ -50,23 +52,41 @@ class EventoController extends AbstractController
 
     #[Route('/new', name: 'app_evento_new', methods: ['POST'])]
     public function new(Request $request, 
-    EventoRepository $eventoRepository): JsonResponse
+    EventoRepository $eventoRepository,
+    FrecuenciaRepository $frecuenciaRepository): JsonResponse
    {   
-        // // recuperando concurrencia
-        // $data=$request->request->get('evento', null);
-        // $concurrencia=$data['concurrencia'];
-        // $frecuencias=array();
-        // Var_dump($concurrencia);
-
+        // recuperando frecuencias   
+        $parametros=$request->request->all(); 
+        $request->request->replace(["evento"=>$parametros]);
+        
+        $frecuencias=array();
+        $frecuencias[]=boolval($parametros['lunes']);
+        $frecuencias[]=boolval($parametros['martes']);
+        $frecuencias[]=boolval($parametros['miercoles']);
+        $frecuencias[]=boolval($parametros['jueves']);
+        $frecuencias[]=boolval($parametros['viernes']);
+        $frecuencias[]=boolval($parametros['sabado']);
+        $frecuencias[]=boolval($parametros['domingo']);
+        
         try{
-            $evento = new Evento();
-            $form = $this->createForm(EventoType::class, $evento);
+            $eventoX = new Evento();
+            $form = $this->createForm(EventoType::class, $eventoX);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $eventoRepository->save($evento, true);
-                $result= $this->responseHelper->responseDatos(['message'=>"Evento guardado.",'id'=>$evento->getId()]);
-                    
+                $eventoRepository->save($eventoX, true);
+                // creando frecuencias
+                // nota: los dias inician en 1
+                foreach ($frecuencias as $dia => $isChecked) {
+                    $frecuencia=new Frecuencia();
+                    $frecuencia->setDia(++$dia);
+                    $frecuencia->setChecked($isChecked);
+                    $frecuencia->setEvento($eventoX);
+                    $frecuenciaRepository->save($frecuencia,true);
+                }
+                $result= $this->responseHelper->responseDatos(['message'=>"Evento guardado.",'id'=>$eventoX->getId()]);
+                
             }else{
+                var_dump($frecuencias);
                 $result= $this->responseHelper->responseDatos($form->getErrors(true));
             }
         }catch(Exception $e){
