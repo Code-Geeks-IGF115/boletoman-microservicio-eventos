@@ -56,7 +56,7 @@ class EventoController extends AbstractController
     FrecuenciaRepository $frecuenciaRepository): JsonResponse
    {   
         // recuperando frecuencias   
-        $parametros=$request->request->all(); 
+        $parametros=$parametros=$request->toArray(); 
         $request->request->replace(["evento"=>$parametros]);
         
         $frecuencias=array();
