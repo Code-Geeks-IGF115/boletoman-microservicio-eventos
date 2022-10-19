@@ -116,14 +116,13 @@ class EventoController extends AbstractController
         $idSalaDeEventos = $parametros['salaDeEventosId'];
         
         if(empty($evento)){
-            $result= $this->responseHelper->responseMessage("No se encontró el evento solicitado.");
+            $result= $this->responseHelper->responseMessage("Evento no existe.");
         }
         else{
             $evento->setSalaDeEventosID((int)$idSalaDeEventos);
             $eventoRepository->save($evento, true);
-            $result = $this->responseHelper->responseDatos("los datos se han guardado");
+            $result = $this->responseHelper->responseMessage("Sala de Eventos asignada a ".$evento->getNombre());
         } 
-        //$result = $this->responseHelper->responseDatos($parametros);
         return $result;   
     }
 
