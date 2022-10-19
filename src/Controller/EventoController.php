@@ -108,6 +108,25 @@ class EventoController extends AbstractController
         return $result;   
     }
 
+    #[Route('/{id}/sala/de/eventos', name: 'app_evento_unir', methods: ['POST', 'GET'])]
+    public function unir(Evento $evento = null, Request $request, 
+    EventoRepository $eventoRepository, $id): JsonResponse
+    {
+        $parametros=$request->toArray(); 
+        $idSalaDeEventos = $parametros['salaDeEventosId'];
+        
+        if(empty($evento)){
+            $result= $this->responseHelper->responseMessage("No se encontró el evento solicitado.");
+        }
+        else{
+            $evento->setSalaDeEventosID((int)$idSalaDeEventos);
+            $eventoRepository->save($evento, true);
+            $result = $this->responseHelper->responseDatos("los datos se han guardado");
+        } 
+        //$result = $this->responseHelper->responseDatos($parametros);
+        return $result;   
+    }
+
     #[Route('/{id}/edit', name: 'app_evento_edit', methods: ['POST'])]
     public function edit(Request $request, Evento $evento = null, 
     EventoRepository $eventoRepository, SerializerInterface $serializer): JsonResponse
