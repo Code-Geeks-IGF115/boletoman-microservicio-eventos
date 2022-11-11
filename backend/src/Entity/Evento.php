@@ -184,9 +184,19 @@ class Evento
         return $this;
     }
 
-    public function getSalaDeEventos(): ?SalaDeEventos
+    public function getSalaDeEventos(): Collection
     {
         return $this->salaDeEventos;
+    }
+
+    public function addSalaDeEventos(SalaDeEventos $salaDeEventos): self
+    {
+        if (!$this->salaDeEventos->contains($salaDeEventos)) {
+            $this->salaDeEventos->add($salaDeEventos);
+            $salaDeEventos->setEvento($this);
+        }
+
+        return $this;
     }
 
     public function setSalaDeEventos(?SalaDeEventos $salaDeEventos): self
