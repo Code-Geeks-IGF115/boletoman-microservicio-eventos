@@ -66,6 +66,9 @@ class Evento
     #[ORM\OneToMany(mappedBy: 'evento', targetEntity: Frecuencia::class, orphanRemoval: true)]
     private Collection $concurrencia;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $idUsuario = null;
+
     public function __construct()
     {
         $this->imagens = new ArrayCollection();
@@ -260,6 +263,18 @@ class Evento
                 $concurrencium->setEvento(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIdUsuario(): ?int
+    {
+        return $this->idUsuario;
+    }
+
+    public function setIdUsuario(?int $idUsuario): self
+    {
+        $this->idUsuario = $idUsuario;
 
         return $this;
     }
