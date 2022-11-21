@@ -39,7 +39,6 @@ class EventoController extends AbstractController
     ): JsonResponse
     {
         $categoriaId=$request->query->get('categoria', null);
-        $this->logger->info($categoriaId);
         //si no se agrega categoria, entonces recupera todos los eventos
         if(!$categoriaId){
             $eventos=$eventoRepository->findAll();
@@ -57,17 +56,17 @@ class EventoController extends AbstractController
     FrecuenciaRepository $frecuenciaRepository): JsonResponse
    {   
         // recuperando frecuencias   
-        $parametros=$request->request->all(); 
+        $parametros=$parametros=$request->toArray(); 
         $request->request->replace(["evento"=>$parametros]);
         
         $frecuencias=array();
-        $frecuencias[]=boolval($parametros['lunes']);
-        $frecuencias[]=boolval($parametros['martes']);
-        $frecuencias[]=boolval($parametros['miercoles']);
-        $frecuencias[]=boolval($parametros['jueves']);
-        $frecuencias[]=boolval($parametros['viernes']);
-        $frecuencias[]=boolval($parametros['sabado']);
-        $frecuencias[]=boolval($parametros['domingo']);
+        $frecuencias[]=($parametros['lunes']===true)? true:false;
+        $frecuencias[]=($parametros['martes']===true)? true:false;
+        $frecuencias[]=($parametros['miercoles']===true)? true:false;
+        $frecuencias[]=($parametros['jueves']===true)? true:false;
+        $frecuencias[]=($parametros['viernes']===true)? true:false;
+        $frecuencias[]=($parametros['sabado']===true)? true:false;
+        $frecuencias[]=($parametros['domingo']===true)? true:false;
         
         try{
             $eventoX = new Evento();
@@ -87,7 +86,7 @@ class EventoController extends AbstractController
                 $result= $this->responseHelper->responseDatos(['message'=>"Evento guardado.",'id'=>$eventoX->getId()]);
                 
             }else{
-                var_dump($frecuencias);
+                // var_dump($frecuencias);
                 $result= $this->responseHelper->responseDatos($form->getErrors(true));
             }
         }catch(Exception $e){
@@ -104,7 +103,25 @@ class EventoController extends AbstractController
             $result= $this->responseHelper->responseMessage("No se encontró el evento solicitado.");
         }
         else{
-            $result = $this->responseHelper->responseDatos(['evento'=>$evento]);
+            $result = $this->responseHelper->responseDatos(['evento'=>$evento],['ver_evento']);
+        } 
+        return $result;   
+    }
+
+    #[Route('/{id}/sala/de/eventos', name: 'app_evento_unir', methods: ['POST', 'GET'])]
+    public function unir(Evento $evento = null, Request $request, 
+    EventoRepository $eventoRepository, $id): JsonResponse
+    {
+        $parametros=$request->toArray(); 
+        $idSalaDeEventos = $parametros['salaDeEventosId'];
+        
+        if(empty($evento)){
+            $result= $this->responseHelper->responseMessage("Evento no existe.");
+        }
+        else{
+            $evento->setSalaDeEventosID((int)$idSalaDeEventos);
+            $eventoRepository->save($evento, true);
+            $result = $this->responseHelper->responseMessage("Sala de Eventos asignada a ".$evento->getNombre());
         } 
         return $result;   
     }
@@ -139,7 +156,16 @@ class EventoController extends AbstractController
         }else{
             $eventoRepository->remove($evento, true);
         }        
-
+        
         return $this->responseHelper->responseMessage("Evento eliminado.");
     }
+    
+    #[Route('/mis/eventos', name: 'app_evento_mis_eventos', methods: ['GET'])]
+    public function misEventos(Request $request, EventoRepository $eventoRepository): JsonResponse{
+        $reservacionesRequest=$request->toArray();// recuperando ids detalle compras que envia microservicio compras
+        $idEventos=$reservacionesRequest["idEventos"];
+        $eventos=$eventoRepository->findEventosByids($idEventos);
+        return $this->responseHelper->responseDatos(['eventos'=>$eventos],['mis_eventos']);
+    }
+
 }
