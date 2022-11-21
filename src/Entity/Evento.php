@@ -55,7 +55,7 @@ class Evento
     #[ORM\OneToMany(mappedBy: 'evento', targetEntity: Imagen::class, orphanRemoval: true)]
     private Collection $imagens;
     
-    #[Groups(['mis_eventos'])]
+    #[Groups(['ver_evento','mis_eventos'])]
     #[ORM\Column(nullable:true)]     
     private ?int $sala_de_eventos_id = null;
 
