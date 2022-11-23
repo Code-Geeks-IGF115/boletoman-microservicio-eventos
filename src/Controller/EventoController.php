@@ -159,6 +159,39 @@ class EventoController extends AbstractController
         
         return $this->responseHelper->responseMessage("Evento eliminado.");
     }
+
+
+    #[Route('/eventosdeusuarios/{idUsuario}', name: 'app_ver_eventos_de_usuario', methods: ['GET'])]
+    public function eventosdeusuarios($idUsuario, EventoRepository $eventoRepository): JsonResponse
+    {
+        $eventos= $eventoRepository->findByUsuario($idUsuario);
+        
+        foreach($eventos as $evento)
+        {
+            $data[]=[
+                'idUsuario '=>$idUsuario,
+                'id'=>$evento["id"],
+                'nombre'=>$evento["nombre"],
+                'fechaInicio'=>date_format($evento["fechaInicio"],'d-m-Y'),
+                'horaInicio'=>date_format($evento['horaInicio'],'h:i'),
+                'horaFin'=>date_format($evento['horaFin'],'h:i'),
+            ];
+            
+            // foreach($numeroEvento as $dato)
+            // {
+            //     $ids[]=$dato['id'];
+            //     $nombre[]=$dato['nombre'];
+            //     $fechas[]=date_format($dato['fechaInicio'],'dd-mm-YYYY');
+            //     $horaI[]=date_format($dato['horaInicio'],'HH [.:] MM ');
+            //     $horaF[]=date_format($dato['horaFin'],'HH [.:] MM ');
+            //     $eventosTotales[]=array_push($ids,$nombre,$fechas,$horaI,$horaF);
+            // }
+        }
+        
+        $result = $this->responseHelper->responseDatos($data);
+        return $result;   
+    }
+
     
     #[Route('/mis/eventos', name: 'app_evento_mis_eventos', methods: ['GET'])]
     public function misEventos(Request $request, EventoRepository $eventoRepository): JsonResponse{
@@ -167,5 +200,6 @@ class EventoController extends AbstractController
         $eventos=$eventoRepository->findEventosByids($idEventos);
         return $this->responseHelper->responseDatos(['eventos'=>$eventos],['mis_eventos']);
     }
+
 
 }

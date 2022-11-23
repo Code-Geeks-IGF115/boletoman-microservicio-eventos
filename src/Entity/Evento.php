@@ -62,10 +62,16 @@ class Evento
     #[ORM\ManyToOne(inversedBy: 'eventos')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['ver_evento'])]
+
     private ?CategoriaEvento $categoria = null;
 
     #[ORM\OneToMany(mappedBy: 'evento', targetEntity: Frecuencia::class, orphanRemoval: true)]
     private Collection $concurrencia;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $idUsuario = null;
+
+
 
     public function __construct()
     {
@@ -233,6 +239,21 @@ class Evento
         $this->categoria = $categoria;
 
         return $this;
+    }
+
+   
+
+    public function getIdUsuario(): ?int
+    {
+        return $this->idUsuario;
+    }
+
+    public function setIdUsuario(?int $idUsuario): self
+    {
+        $this->idUsuario = $idUsuario;
+
+        return $this;
+
     }
 
     /**
