@@ -181,7 +181,7 @@ class EventoController extends AbstractController
             }
             
         }catch(Exception $e){
-            $data=[];
+            $data=['eventos'=>[]];
         }
         return $this->responseHelper->responseDatos($data);
         
