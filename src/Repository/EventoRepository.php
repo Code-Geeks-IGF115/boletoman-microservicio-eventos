@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Entity\Evento;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-
+use Doctrine\ORM\Query\ResultSetMapping;
 /**
  * @extends ServiceEntityRepository<Evento>
  *
@@ -39,6 +39,17 @@ class EventoRepository extends ServiceEntityRepository
         }
     }
 
+    public function findByUsuario($idUsuario): array
+   {
+       return $this->createQueryBuilder('e')
+                   ->select('e.id, e.nombre, e.fechaInicio, e.horaInicio, e.horaFin')
+                   ->where('e.idUsuario = :id_usuario')
+                   ->setParameter('id_usuario', $idUsuario)
+                   ->orderBy('e.id', 'ASC')
+                   ->getQuery()
+                   ->getResult()
+                   ; 
+   }
 //    /**
 //     * @return Evento[] Returns an array of Evento objects
 //     */
