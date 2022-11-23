@@ -156,9 +156,10 @@ class EventoController extends AbstractController
         }else{
             $eventoRepository->remove($evento, true);
         }        
-
+        
         return $this->responseHelper->responseMessage("Evento eliminado.");
     }
+
 
     #[Route('/eventosdeusuarios/{idUsuario}', name: 'app_ver_eventos_de_usuario', methods: ['GET'])]
     public function eventosdeusuarios($idUsuario, EventoRepository $eventoRepository): JsonResponse
@@ -190,4 +191,15 @@ class EventoController extends AbstractController
         $result = $this->responseHelper->responseDatos($data);
         return $result;   
     }
+
+    
+    #[Route('/mis/eventos', name: 'app_evento_mis_eventos', methods: ['GET'])]
+    public function misEventos(Request $request, EventoRepository $eventoRepository): JsonResponse{
+        $reservacionesRequest=$request->toArray();// recuperando ids detalle compras que envia microservicio compras
+        $idEventos=$reservacionesRequest["idEventos"];
+        $eventos=$eventoRepository->findEventosByids($idEventos);
+        return $this->responseHelper->responseDatos(['eventos'=>$eventos],['mis_eventos']);
+    }
+
+
 }

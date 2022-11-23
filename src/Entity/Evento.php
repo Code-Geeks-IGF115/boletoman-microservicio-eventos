@@ -17,50 +17,52 @@ class Evento
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['ver_evento'])]
+    #[Groups(['ver_evento', 'mis_eventos'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['ver_evento'])]
+    #[Groups(['ver_evento', 'mis_eventos'])]
     private ?string $nombre = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['ver_evento'])]
+    #[Groups(['ver_evento', 'mis_eventos'])]
     private ?string $descripcion = null;
 
     #[ORM\Column(length: 25)]
-    #[Groups(['ver_evento'])]
+    #[Groups(['ver_evento', 'mis_eventos'])]
     private ?string $tipoDeEvento = null;
  /**
      * @Assert\GreaterThanOrEqual("today")
      */
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['ver_evento'])]
+    #[Groups(['ver_evento', 'mis_eventos'])]
     private ?DateTime $fechaInicio = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    #[Groups(['ver_evento'])]
+    #[Groups(['ver_evento', 'mis_eventos'])]
     private ?DateTime $horaInicio = null;
  /**
      * @Assert\GreaterThanOrEqual(propertyPath="fechaInicio")
      */
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['ver_evento'])]
+    #[Groups(['ver_evento', 'mis_eventos'])]
     private ?DateTime $fechaFin = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    #[Groups(['ver_evento'])]
+    #[Groups(['ver_evento', 'mis_eventos'])]
     private ?DateTime $horaFin = null;
-
+    
     #[ORM\OneToMany(mappedBy: 'evento', targetEntity: Imagen::class, orphanRemoval: true)]
     private Collection $imagens;
-
+    
+    #[Groups(['ver_evento','mis_eventos'])]
     #[ORM\Column(nullable:true)]     
     private ?int $sala_de_eventos_id = null;
 
     #[ORM\ManyToOne(inversedBy: 'eventos')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['ver_evento'])]
+
     private ?CategoriaEvento $categoria = null;
 
     #[ORM\OneToMany(mappedBy: 'evento', targetEntity: Frecuencia::class, orphanRemoval: true)]
@@ -68,6 +70,8 @@ class Evento
 
     #[ORM\Column(nullable: true)]
     private ?int $idUsuario = null;
+
+
 
     public function __construct()
     {
@@ -237,6 +241,21 @@ class Evento
         return $this;
     }
 
+   
+
+    public function getIdUsuario(): ?int
+    {
+        return $this->idUsuario;
+    }
+
+    public function setIdUsuario(?int $idUsuario): self
+    {
+        $this->idUsuario = $idUsuario;
+
+        return $this;
+
+    }
+
     /**
      * @return Collection<int, Frecuencia>
      */
@@ -263,18 +282,6 @@ class Evento
                 $concurrencium->setEvento(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getIdUsuario(): ?int
-    {
-        return $this->idUsuario;
-    }
-
-    public function setIdUsuario(?int $idUsuario): self
-    {
-        $this->idUsuario = $idUsuario;
 
         return $this;
     }
