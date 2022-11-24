@@ -62,9 +62,9 @@ class Evento
     #[ORM\ManyToOne(inversedBy: 'eventos')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['ver_evento'])]
-
     private ?CategoriaEvento $categoria = null;
-
+ 
+    #[Groups(['ver_evento'])]
     #[ORM\OneToMany(mappedBy: 'evento', targetEntity: Frecuencia::class, orphanRemoval: true)]
     private Collection $concurrencia;
 

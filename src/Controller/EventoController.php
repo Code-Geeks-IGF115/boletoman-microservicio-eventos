@@ -56,7 +56,7 @@ class EventoController extends AbstractController
     FrecuenciaRepository $frecuenciaRepository): JsonResponse
    {   
         // recuperando frecuencias   
-        $parametros=$parametros=$request->toArray(); 
+        $parametros=$request->toArray(); 
         $request->request->replace(["evento"=>$parametros]);
         
         $frecuencias=array();
@@ -128,17 +128,37 @@ class EventoController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_evento_edit', methods: ['POST'])]
     public function edit(Request $request, Evento $evento = null, 
-    EventoRepository $eventoRepository, SerializerInterface $serializer): JsonResponse
+    EventoRepository $eventoRepository,
+    FrecuenciaRepository $frecuenciaRepository): JsonResponse
     {
+         // recuperando frecuencias   
+         $parametros=$request->toArray();         
+         $frecuencias=array();
+         $frecuencias[]=($parametros['lunes']===true)? true:false;
+         $frecuencias[]=($parametros['martes']===true)? true:false;
+         $frecuencias[]=($parametros['miercoles']===true)? true:false;
+         $frecuencias[]=($parametros['jueves']===true)? true:false;
+         $frecuencias[]=($parametros['viernes']===true)? true:false;
+         $frecuencias[]=($parametros['sabado']===true)? true:false;
+         $frecuencias[]=($parametros['domingo']===true)? true:false;
+         $request->request->replace(["evento"=>$parametros]);
         if(empty($evento)){
             $result= $this->responseHelper->responseMessage("No se encontró el evento solicitado."); 
         }
         else{
+            // dd($dia);
+            
             $form = $this->createForm(EventoType::class, $evento);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $eventoRepository->save($evento, true);
+                // modificando frecuencias
+                // nota: los dias inician en 1
+                foreach ($evento->getConcurrencia() as $dia) {
+                    $dia->setChecked($frecuencias[$dia->getDia()]);
+                    $frecuenciaRepository->save($dia,true);
+                }
                 $result= $this->responseHelper->responseMessage("El evento se ha modificado.");
             }
             else{

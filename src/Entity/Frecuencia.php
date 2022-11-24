@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 use App\Repository\FrecuenciaRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,11 +12,13 @@ class Frecuencia
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
+    
     #[ORM\Column]
+    #[Groups(['ver_evento'])]
     private ?int $dia = null;
 
     #[ORM\Column]
+    #[Groups(['ver_evento'])]
     private ?bool $checked = null;
 
     #[ORM\ManyToOne(inversedBy: 'concurrencia')]
