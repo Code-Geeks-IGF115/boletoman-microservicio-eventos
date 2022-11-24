@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Evento;
 use App\Entity\Frecuencia;
-use App\Form\EventoType;
+use App\Form\{EventoEditarType,EventoType};
 use App\Repository\CategoriaEventoRepository;
 use App\Repository\EventoRepository;
 use App\Repository\FrecuenciaRepository;
@@ -127,9 +127,10 @@ class EventoController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_evento_edit', methods: ['POST'])]
-    public function edit(Request $request, Evento $evento = null, 
+    public function edit(Request $request,$id, Evento $evento,
     EventoRepository $eventoRepository,
-    FrecuenciaRepository $frecuenciaRepository): JsonResponse
+    FrecuenciaRepository $frecuenciaRepository,
+    CategoriaEventoRepository $categoriaEventoRepository): JsonResponse
     {
          // recuperando frecuencias   
          $parametros=$request->toArray();         
@@ -141,18 +142,20 @@ class EventoController extends AbstractController
          $frecuencias[]=($parametros['viernes']===true)? true:false;
          $frecuencias[]=($parametros['sabado']===true)? true:false;
          $frecuencias[]=($parametros['domingo']===true)? true:false;
-         $request->request->replace(["evento"=>$parametros]);
+        //  $categoria=$categoriaEventoRepository->find($parametros['categoria']);
+        //  $parametros['categoria']=$categoria;
+        // $parametros['categoria'];
+        $request->request->replace(["evento"=>$parametros]);
         if(empty($evento)){
             $result= $this->responseHelper->responseMessage("No se encontró el evento solicitado."); 
         }
         else{
-            // dd($dia);
+            // $form = $this->createForm(EventoEditarType::class, $evento);
+            // $form->handleRequest($request);
             
-            $form = $this->createForm(EventoType::class, $evento);
-            $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $eventoRepository->save($evento, true);
+            try{
+                // $eventoRepository->save($evento, true);
                 // modificando frecuencias
                 // nota: los dias inician en 1
                 foreach ($evento->getConcurrencia() as $dia) {
@@ -161,8 +164,9 @@ class EventoController extends AbstractController
                 }
                 $result= $this->responseHelper->responseMessage("El evento se ha modificado.");
             }
-            else{
-                $result= $this->responseHelper->responseDatosNoValidos();  
+            catch(Exception $e){
+                // dd($form);
+                $result= $this->responseHelper->responseDatosNoValidos($e->getMessage());  
             }
         } 
         return $result;
