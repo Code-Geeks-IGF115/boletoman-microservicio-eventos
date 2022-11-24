@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Evento;
+use Doctrine\DBAL\Types\IntegerType;
+use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -33,6 +35,7 @@ class EventoType extends AbstractType
                 'widget' =>  'single_text',
                 'input'  => 'string'
             ])
+            ->add('idUsuario')
         ;
     }
 
