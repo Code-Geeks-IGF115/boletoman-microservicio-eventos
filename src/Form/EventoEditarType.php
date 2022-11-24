@@ -21,6 +21,7 @@ class EventoEditarType extends AbstractType
             ->add('horaInicio')
             ->add('fechaFin')
             ->add('horaFin')
+            ->add('idUsuario')
         ;
     }
 
